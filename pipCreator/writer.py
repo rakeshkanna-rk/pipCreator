@@ -5,8 +5,11 @@ import sys
 import time
 from string import ascii_lowercase, ascii_uppercase, digits
 
+from textPlay.colors import *
+from textPlay.files import write_file, list_dir
+
 # CONSTANTS
-from .constants import *
+from constants import *
 
 
 # CHECK DIRECTORY
@@ -15,23 +18,22 @@ def check_directory(directory, proj_name):
     # Check if directory exists
     if not os.path.exists(directory):
         # options()
-        description, keywords, author, author_mail, licence = options()
-        print(f"{yellow}Directory doesn't exist.{reset}")
+        print(f"{YELLOW}Directory doesn't exist.{RESET}")
 
         dir_loop = True
         while dir_loop:
-            dir_crt = input("Do you want to create the directory? (y/n) ")
-            if dir_crt.lower() == 'y':
+            dir_crt = input(f"Do you like to create the directory? (y/n) [{CYAN}Y{RESET}/{RED}N{RESET}] ")
+            if dir_crt.lower() == 'y' or dir_crt.lower() == '':
                 os.makedirs(directory)
-                print(f"{green}Directory created successfully. ✔{reset}")
+                print(f"{GREEN}√ Directory created successfully.{RESET}")
                 time.sleep(0.5)
-                create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence)
+                description, keywords, author, author_mail, licence, dependencies = options()
+                create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
                 dir_loop = False
 
             elif dir_crt.lower() == 'n':
-                print(f"{red}Creating project aborted.{reset}")
+                print(f"{RED}Creating project aborted.{RESET}")
                 print(f"\n{footer}")
-                dir_loop = False
                 sys.exit(1)
 
             else:
@@ -40,12 +42,13 @@ def check_directory(directory, proj_name):
     else:
         # Check if directory is empty
         if not os.listdir(directory):
-            description, keywords, author, author_mail, licence = options()
-            print("Directory is empty. Creating files and folders...")
-            create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence)
+            description, keywords, author, author_mail, licence, dependencies = options()
+            print("Creating files and folders...", end="\r")
+            time.sleep(1.0)
+            create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
         else:
             print(check_directory_err)
-            list_files(directory)
+            list_dir(directory)
 
 
 # CREATE README.MD
@@ -91,10 +94,11 @@ def create_pyprojecttoml(directory, description, keywords, author, author_mail, 
 
 
 # CREATE REQUIREMENTS.TXT
-def create_requirements(directory):
+def create_requirements(directory, requirements):
+    requirements = requirements.split()
     with open(os.path.join(directory, 'requirements.txt'), 'w') as f:
-        requirements = '# your requirements here\n'
-        f.write(requirements)
+        for dependency in requirements:
+            f.write(f"{dependency}\n")
     print(requirements_success)
     return requirements
 
@@ -122,75 +126,66 @@ def folders(directory, proj_name, folder_name):
     with open(os.path.join(directory, folder_name, '__init__.py'), 'w') as f:
         init = init_writer()
         f.write(init)
-        print(f"{green}{proj_name}/__init__.py created successfully. ✔{reset}")
+        print(f" {GREEN}√ {proj_name}/__init__.py created successfully.{RESET}")
         time.sleep(0.5)
 
     with open(os.path.join(directory, folder_name, 'main.py'), 'w') as f:
         main = main_writer()
         f.write(main)
-        print(f"{green}{proj_name}/main.py created successfully. ✔{reset}\n")
+        print(f"{GREEN}√ {proj_name}/main.py created successfully.{RESET}\n")
         time.sleep(0.5)
 
     return init, main
 
-
 # CREATE FILES AND FOLDERS
-def create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence="MIT"): 
+def create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence="MIT", dependencies=""): 
 
-    print()
-    messages = [wrt_prog_remd + directory, wrt_prog_setuppy + directory, 
-                wrt_prog_setupcfg + directory, wrt_prog_pyprojecttoml + directory, 
-                wrt_prog_gitignore + directory, wrt_prog_license + directory, 
-                wrt_prog_requirements + directory]
-    for i in range(101):
-        progress = i / 100
-        erase_bar(progress, messages=messages)
-        time.sleep(0.05)
+    print(f"Setup Types: {BOLD}{GREEN}setup.py {YELLOW}pyproject.toml{RESET}")
+    setup = ""
+    loop = True
+    while loop:
+        setuppy = input(f"Do you want to create a setup.py file for your project? (y/n) [{CYAN}Y{RESET}] ")
+        if setuppy.lower() == 'y' or setuppy.lower() == 'yes' or setuppy.lower() == '':
+            setuppy = create_setuppy(directory, description, keywords, author, author_mail, proj_name, licence)
+            time.sleep(0.5)
+            setup = "setup.py"
+            break
+        
+        pyproj = input(f"Do you want to create a pyproject.toml file for your project? (y/n) [{CYAN}Y{RESET}]")
+        if pyproj.lower() == 'y' or pyproj.lower() == 'yes' or pyproj.lower() == '':
+            # Create files
+            pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence)
+            time.sleep(0.5)
+            setup = "pyproject.toml"
+            break
 
-    # Create files
+    if not setuppy and not pyproj:
+        print(f"{YELLOW}No setup file created{RESET}\nDefaulting to pyproject.toml\n")
+        pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence)
+
     readme = create_readme(directory, description, proj_name)
-    time.sleep(0.5)
-    setuppy = create_setuppy(directory, description, keywords, author, author_mail, proj_name, licence)
-    time.sleep(0.5)
-    setupcfg = create_setupcfg(directory, description, keywords, author, author_mail, proj_name, licence)
-    time.sleep(0.5)
-    pyprojecttoml = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence)
     time.sleep(0.5)
     gitignore_fh = create_gitignore(directory)
     time.sleep(0.5)
     licence = create_license(directory)
     time.sleep(0.5)
-    requirements = create_requirements(directory)
+    requirements = create_requirements(directory, dependencies)
     time.sleep(0.5)
 
     # Folder name
     folder_name = os.path.basename(directory)
-
     # CREATING FOLDERS
     init, main = folders(directory, proj_name, folder_name)
 
+    print(lst_file_display(proj_name, setup))
 
-    print(file_written_check)
-    written_file_check = input("\nDo you want to check files? (y/n): ")
-    if written_file_check.lower() == 'y':
-        file_printer(readme, setuppy, setupcfg, pyprojecttoml, requirements, gitignore_fh, init, main, proj_name)
-    print(files_success)
-    print(ready_to_code)
-    print(f"\n\t {yellow}cd{reset} {directory}\n")
+    print(f"{files_success}\n{ready_to_code}")
+    print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
     print(footer)
-
-
-def list_files(directory):
-    # List files in the directory
-    files = os.listdir(directory)
-    for file_name in files:
-        print(file_name)
-
 
 
 # MAIN (PIP CREATOR)
 def pip_creator():
-    print(title)
 
     if len(sys.argv) != 3:
         print("Usage: pipcreator create <directory>")
@@ -201,46 +196,22 @@ def pip_creator():
     directory = sys.argv[2]
 
     if "-" in directory:
-        print(f"{yellow}The ' - ' will be replaced as '_' in the folder name{reset}")
+        print(f"{YELLOW}The ' - ' will be replaced as '_' in the folder name{RESET}")
         directory = directory.replace("-", "_")
 
     if any(char not in folder_name for char in directory):
-        print(f"{red}Invalid directory name{reset}")
-        print(f"{yellow}Directory name must contain only the following characters:{reset}")
+        print(f"{RED}Invalid directory name{RESET}")
+        print(f"{YELLOW}Directory name must contain only the following characters:{RESET}")
         print("A-Z a-z 0-9 _ \n")
         print(footer)
         sys.exit(1)
 
     if directory == '.' or directory == './':
         directory = os.getcwd()
-        print(f"Creating project in current directory: {directory}")
 
     proj_name = os.path.basename(directory)
 
-    file_content = f'''\n
-    {proj_name}/__init__.py
-    {proj_name}/main.py
-    .gitignore
-    LICENSE
-    README.md
-    setup.py
-    setup.cfg
-    pyproject.toml
-    requirements.txt
-    '''
-    print(f'The folder will be created in {directory} \n{file_content}')
+    print(f'Creating project @ {directory}')
 
-    check = True
-    while check:
-        file_check = input(f"Are you sure you want to create the following files in {directory}? (y/n) ")
-
-        if file_check.lower() == 'y':
-            check_directory(directory, proj_name)
-            check = False
-        elif file_check.lower() == 'n':
-            print(exit_msg)
-            print(footer)
-            sys.exit(0)
-        else:
-            print(invalid_input)
+    check_directory(directory, proj_name)
 

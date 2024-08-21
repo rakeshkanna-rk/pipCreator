@@ -86,7 +86,7 @@ def run_setup_command_upload():
 
     elif folder_complete == True:
         time.sleep(1.0)
-        required_files = ['dist', 'build', f'{proj_name}.egg-info']
+        required_files = ['dist', f'{proj_name}.egg-info']
         bsdist_check, missing_files = check_bsdist(directory, required_files)
         if bsdist_check == False:
             print(f"Folder missing the build and dist folders.")

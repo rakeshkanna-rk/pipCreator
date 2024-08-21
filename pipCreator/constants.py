@@ -22,7 +22,7 @@ license_success = f"{GREEN}License created successfully. ✔{RESET}"
 
 
 files_success = f"\n{GREEN}All files created successfully. ✔{RESET}"
-ready_to_code = "Your project folder is ready to use."
+ready_to_code = "Your project folder is ready to code."
 file_written_check = f"{GREEN}Files Written successfully. ✔{RESET}"
 
 
@@ -56,6 +56,22 @@ footer = f"{author}\n{CYAN}Happy Coding!{RESET}"
 invalid_input = f"{RED}Invalid input. Please enter 'y' or 'n'.{RESET}"
 exit_msg = f"{RED}Exiting the program.{RESET}\n"
 
+def lst_file_display(project, setup):
+    lst_file = f'''
+{project}/
+│
+├── {project}/
+│   ├── __init__.py
+│   └── main.py
+│
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── .gitignore
+└── {setup}
+'''
+
+    return lst_file
 
 gitignore = '''
 # Byte-compiled / optimized Python files
@@ -146,11 +162,16 @@ def options():
         licence = input(f"{CYAN}Enter license for your project: {RESET}")
         lic = False
 
-    return description, keywords, author, author_mail, licence
+    dep = True
+    while dep:
+        dependencies = input(f"{CYAN}Any dependencies for your project: {RESET}")
+        dep = False
+
+    return description, keywords, author, author_mail, licence, dependencies
 
 
 def check_folder_contents(dir_path, proj_name):
-    required_files = [proj_name, '.gitignore', 'LICENSE', 'README.md', 'requirements.txt']
+    required_files = [proj_name, 'LICENSE', 'README.md', 'requirements.txt']
     setup_files = ['setup.py', 'setup.cfg', 'pyproject.toml']
     
     folder_files = os.listdir(dir_path)
@@ -169,26 +190,16 @@ def check_folder_contents(dir_path, proj_name):
         return False, missing_files
 
 
-def file_printer(readme, setuppy, setupcfg, pyprojecttoml, requirements, gitignore_fh, init, main, proj_name):
+def file_printer(readme, setup, setup_read, requirements, gitignore_fh, init, main, proj_name):
     print(f'''
+--------------------------------
+{setup}
+{setup_read}
+--------------------------------
+
 --------------------------------
 README.md
 {readme}
---------------------------------
-
---------------------------------
-setup.py
-{setuppy}
---------------------------------
-
---------------------------------
-setup.cfg
-{setupcfg}
---------------------------------
-
---------------------------------
-pyproject.toml
-{pyprojecttoml}
 --------------------------------
 
 --------------------------------

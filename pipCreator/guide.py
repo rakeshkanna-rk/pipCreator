@@ -1,8 +1,7 @@
 from constants import title, author, footer
 from textPlay.colors import *
 
-guide_text = f"""{title}
-Author:{author}
+guide_text = f"""Author:{author}
 
 Let's get started!
 

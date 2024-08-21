@@ -5,9 +5,11 @@ from convert import run_setup_command_convert
 from upload import run_setup_command_upload
 from guide import guide_learn
 from createtest import test_folder
+from constants import title
 
 @click.group()
 def cli():
+    print(title)
     pass
 
 @click.command()

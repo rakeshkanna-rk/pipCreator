@@ -1,10 +1,12 @@
+# TODO : Correct All Funtion and ERRORS
+
 import os
 import sys
 import time
 from string import ascii_lowercase, ascii_uppercase, digits
 
 # CONSTANTS
-from pipcreator.constants import *
+from .constants import *
 
 
 # CHECK DIRECTORY

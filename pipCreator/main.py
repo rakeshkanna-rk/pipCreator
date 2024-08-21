@@ -1,10 +1,10 @@
 import click
 
-from pipcreator.writer import pip_creator
-from pipcreator.convert import run_setup_command_convert
-from pipcreator.upload import run_setup_command_upload
-from pipcreator.guide import guide_learn
-from pipcreator.createtest import test_folder
+from writer import pip_creator
+from convert import run_setup_command_convert
+from upload import run_setup_command_upload
+from guide import guide_learn
+from createtest import test_folder
 
 @click.group()
 def cli():

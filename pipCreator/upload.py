@@ -3,25 +3,28 @@ import subprocess
 import time
 import sys
 
-from pipcreator.constants import green, reset, magenta, yellow, red
-from pipcreator.constants import check_folder_contents
-from pipcreator.constants import title, footer
-from pipcreator.constants import exit_msg, invalid_input
+from textPlay.colors import *
+from textPlay.backend import backend_exec
+from constants import check_folder_contents
+from constants import title, footer
+from constants import exit_msg, invalid_input
 
 
 def uploader(command):
     try:
-        conform = input(f"{yellow}This will use twine to upload the package.{reset} \nAre you sure you want to proceed? (y/n): ")
+        conform = input(f"{YELLOW}This will use twine to upload the package.{YELLOW} \nAre you sure you want to proceed? (y/n): ")
         loop = True
         while loop:
             if conform.lower() == "y":
-                subprocess.run(command, shell=True, check=True)
-                print(f"{green}\nCommand executed successfully. ✔\n")
+                backend_exec(command)
+                print(f"{GREEN}\nCommand executed successfully. ✔\n")
                 loop = False
+                return True
 
             elif conform.lower() == "n":
-                print(f"{red}\nCommand cancelled. \n")
+                print(f"{RED}\nCommand cancelled. \n")
                 loop = False
+                return False
 
             else:
                 print(invalid_input)
@@ -30,6 +33,17 @@ def uploader(command):
         print(f"Error: {e}")
 
 
+def check_bsdist(folder_path, required_files):
+    
+    folder_files = os.listdir(folder_path)
+
+    missing_files = [file_name for file_name in required_files if file_name not in folder_files]
+
+    if not missing_files:
+        return True, None
+    else:
+        return False, missing_files
+
 
 def run_setup_command_upload():
     command = "twine upload dist/*"
@@ -37,12 +51,12 @@ def run_setup_command_upload():
     print(title)
 
     directory = os.getcwd()
-    print(f"Uploading files will happen in current directory: {yellow}{directory}{reset}")
+    print(f"Uploading files will happen @ {YELLOW}{directory}{YELLOW}")
 
     proj_name = os.path.basename(directory)
-    print(f"Project name: {yellow}{proj_name}{reset}\n")
+    print(f"Project name: {YELLOW}{proj_name}{YELLOW}\n")
 
-    print(f"\n{yellow}Make sure you have an account and genrate a API key at https://pypi.org{reset}")
+    print(f"\n{YELLOW}Make sure you have an account and genrated an API key at https://pypi.org{YELLOW}")
 
     loop = True
     while loop:
@@ -51,8 +65,8 @@ def run_setup_command_upload():
             loop = False
         
         elif conform.lower() == 'n':
-            print(f"USE: {magenta}pipcreator convert{reset}")
-            print(f"{red}\nCommand cancelled.\n{exit_msg}{reset}")
+            print(f"USE: {MAGENTA}pipcreator convert{YELLOW}")
+            print(f"{RED}\nCommand cancelled.\n{exit_msg}{YELLOW}")
             print(f"\n{footer}")
             loop = False  
             sys.exit()      
@@ -60,31 +74,34 @@ def run_setup_command_upload():
         else:
             print(invalid_input)
 
-    required_files = [proj_name, '.gitignore', 'LICENSE', 'README.md', 
-                      'setup.py', 'setup.cfg', 'pyproject.toml', 
-                      'requirements.txt', 'dist', 'build', f'{proj_name}.egg-info']
 
-    folder_complete, missing_files = check_folder_contents(directory, required_files)
+    folder_complete, missing_files = check_folder_contents(directory, proj_name)
 
 
     if folder_complete == False:
         time.sleep(1.0)
         print("Folder is missing the following required files:")
         for file_name in missing_files:
-            print(f"{yellow}{file_name}{reset}")
+            print(f"{YELLOW}{file_name}{YELLOW}")
 
     elif folder_complete == True:
         time.sleep(1.0)
-        print(f"\n{green}Folder contains all required files. ✔{reset}")
+        required_files = ['dist', 'build', f'{proj_name}.egg-info']
+        bsdist_check, missing_files = check_bsdist(directory, required_files)
+        if bsdist_check == False:
+            print(f"Folder missing the build and dist folders.")
+            sys.exit(1)
+        print(f"\n{GREEN}Folder contains all required files. ✔{YELLOW}")
         try:
-            uploader(command)
-            print(f"{magenta}Twine Operation Completed...{reset}")
+            done = uploader(command)
+            if done:
+                print(f"{MAGENTA}Twine Operation Completed...{YELLOW}")
 
         except Exception as e:
             print(f"Error on Uploading...\nERROR: {e}")
 
     else: 
-        print(f"{red}Something went wrong. Please try again.{reset}")
+        print(f"{RED}Something went wrong. Please try again.{YELLOW}")
 
     time.sleep(1.0)
     print(f"\n{footer}")

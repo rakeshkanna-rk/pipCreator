@@ -2,12 +2,13 @@ import os
 import sys
 import time
 
-from pipcreator.color import *
-from pipcreator.constants import title, footer, green, reset
-from pipcreator.constants import  test_end_msg , crtfd_msg, crtfl_msg, wrtfl_msg, wrtfl_msg_ovr, crtfd_msg_ovr, crtfl_msg_ovr
-from pipcreator.constants import test_writer, test_show_writer
-from pipcreator.constants import erase_bar
-from pipcreator.constants import check_folder_contents
+from textPlay.colors import *
+from textPlay.files import read_file
+from constants import title, footer
+from constants import test_end_msg , crtfd_msg, crtfl_msg, wrtfl_msg, wrtfl_msg_ovr, crtfd_msg_ovr, crtfl_msg_ovr
+from constants import test_writer, test_show_writer
+from constants import erase_bar
+from constants import check_folder_contents
 
 
 def create_test_folder(proj_name, folder_name):
@@ -22,23 +23,19 @@ def create_test_folder(proj_name, folder_name):
 def test_folder():
     print(title)
     directory = os.getcwd()
-    print(f"Test folder will be created in current directory: {yellow}{directory}{reset}")
+    print(f"Test folder will be created in current directory: {YELLOW}{directory}{RESET}")
 
     proj_name = os.path.basename(directory)
-    print(f"Project name: {yellow}{proj_name}{reset}\n")
+    print(f"Project name: {YELLOW}{proj_name}{RESET}\n")
 
-    print(f"{cyan}Checking folder contents...{reset}", end="\r")
+    print(f"{CYAN}Checking folder contents...{RESET}", end="\r")
 
-    required_files = [proj_name, '.gitignore', 'LICENSE', 'README.md', 'setup.py', 'setup.cfg', 'pyproject.toml']
-
-    folder_complete, missing_files = check_folder_contents(directory, required_files)
-
-    time.sleep(1.0)
+    folder_complete, missing_files = check_folder_contents(directory, proj_name)
 
     if folder_complete == False:
         print("Folder is missing the following required files:")
         for file_name in missing_files:
-            print(f"{yellow}{file_name}{reset}")
+            print(f"{YELLOW}{file_name}{RESET}")
         time.sleep(1.0)
         print(f"\n{footer}")
         sys.exit(1)
@@ -49,25 +46,14 @@ def test_folder():
     folder_path = 'test'
     if os.path.exists(folder_path):
         time.sleep(0.5)
-        print(f"{green}Folder contains all required files. ✔{reset}")
-        print(f"{red}The folder '{proj_name}/{folder_path}' exists.{reset}")
+        print(f"{GREEN}Folder contains all required files. ✔{RESET}")
+        print(f"{RED}The folder '{proj_name}/{folder_path}' exists.{RESET}")
     else:
-        print(f"{green}Folder contains all required files. ✔{reset}")
+        print(f"{GREEN}Folder contains all required files. ✔{RESET}")
         print(f"The folder '{proj_name}/{folder_path}' does not exist.", end="\r")
-        messages = [crtfd_msg + proj_name , 
-            crtfd_msg_ovr + proj_name + reset, 
-            crtfl_msg + proj_name , 
-            crtfl_msg_ovr + proj_name + reset, 
-            wrtfl_msg + proj_name , 
-            wrtfl_msg_ovr + proj_name + reset]
-    
-        for i in range(101):
-            progress = i / 100
-            erase_bar(progress, messages=messages)
-            time.sleep(0.05)
 
         create_test_folder(proj_name, "test")
-        print(f"{green}{proj_name}/test.py created successfully. ✔{reset}")
+        print(f"{GREEN}{proj_name}/test.py created successfully. ✔{RESET}")
 
         time.sleep(0.5)
         print(test_end_msg)
@@ -76,9 +62,14 @@ def test_folder():
         while test_loop:
             check_test = input("Do you want to check the test folder? (y/n): ")
             if check_test.lower() == 'y':
-                test_show = test_show_writer(proj_name)
-                print(test_show)
-                test_loop = False
+                try:
+                    test_show = read_file('test/test.py')
+                    print(test_show)
+                    test_loop = False
+                except FileNotFoundError:
+                    print(f"{RED}Error: test/test.py not found.{RESET}")
+                    print(f"Use {BOLD}pipcreator create-test{RESET} to create the test folder.")
+                    test_loop = False
 
             elif check_test.lower() == 'n':
                 test_loop = False

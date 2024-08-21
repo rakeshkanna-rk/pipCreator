@@ -5,9 +5,9 @@ import sys
 
 from textPlay.colors import *
 from textPlay.backend import backend_exec
-from constants import check_folder_contents
-from constants import title, footer
-from constants import exit_msg, invalid_input
+from pipcreator.constants import check_folder_contents
+from pipcreator.constants import footer
+from pipcreator.constants import exit_msg, invalid_input
 
 
 def uploader(command):
@@ -47,8 +47,6 @@ def check_bsdist(folder_path, required_files):
 
 def run_setup_command_upload():
     command = "twine upload dist/*"
-
-    print(title)
 
     directory = os.getcwd()
     print(f"Uploading files will happen @ {YELLOW}{directory}{YELLOW}")

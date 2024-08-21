@@ -9,7 +9,7 @@ from textPlay.colors import *
 from textPlay.files import write_file, list_dir
 
 # CONSTANTS
-from constants import *
+from pipcreator.constants import *
 
 
 # CHECK DIRECTORY

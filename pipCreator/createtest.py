@@ -4,11 +4,11 @@ import time
 
 from textPlay.colors import *
 from textPlay.files import read_file
-from constants import title, footer
-from constants import test_end_msg , crtfd_msg, crtfl_msg, wrtfl_msg, wrtfl_msg_ovr, crtfd_msg_ovr, crtfl_msg_ovr
-from constants import test_writer, test_show_writer
-from constants import erase_bar
-from constants import check_folder_contents
+from pipcreator.constants import footer
+from pipcreator.constants import test_end_msg , crtfd_msg, crtfl_msg, wrtfl_msg, wrtfl_msg_ovr, crtfd_msg_ovr, crtfl_msg_ovr
+from pipcreator.constants import test_writer, test_show_writer
+from pipcreator.constants import erase_bar
+from pipcreator.constants import check_folder_contents
 
 
 def create_test_folder(proj_name, folder_name):
@@ -21,7 +21,6 @@ def create_test_folder(proj_name, folder_name):
 
 
 def test_folder():
-    print(title)
     directory = os.getcwd()
     print(f"Test folder will be created in current directory: {YELLOW}{directory}{RESET}")
 

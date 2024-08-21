@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pipCreator",
-    version="0.1.0",
+    version="0.1.0b0",
     description="This creates all the necessary files for creating a python package.",
     author="Rakesh Kanna",
     author_email='rakeshkanna0108@gmail.com',
@@ -20,8 +20,8 @@ setup(
         'PyPI' : 'https://pypi.org/project/pipCreator/'
     },
     install_requires=[
-        "click", 
-        "colorama", 
+        "textPlay",
+        "click",
         "twine", 
         "setuptools", 
         "wheel"],

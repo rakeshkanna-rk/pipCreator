@@ -7,9 +7,9 @@ import re
 
 from textPlay.colors import *
 from textPlay.backend import backend_suppress
-from constants import check_folder_contents
-from constants import title, footer
-from constants import exit_msg, invalid_input
+from pipcreator.constants import check_folder_contents
+from pipcreator.constants import footer
+from pipcreator.constants import exit_msg, invalid_input
 
 def convert(command):
     loop = True

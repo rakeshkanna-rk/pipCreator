@@ -1,4 +1,4 @@
-from constants import title, author, footer
+from pipcreator.constants import author, footer
 from textPlay.colors import *
 
 guide_text = f"""Author:{author}
@@ -27,7 +27,7 @@ Let's get started!
     {YELLOW}make sure you have an account on https://pypi.org .{RESET}
 
 
-GitHub  : {BLUE}https://github.com/rakeshkanna-rk/pipCreator{RESET}
+GitHub  : {BLUE}https://github.com/rakeshkanna-rk/pipcreator{RESET}
 PyPI    : {BLUE}https://pypi.org/project/pipcreator/{RESET}
 
 {footer}"""

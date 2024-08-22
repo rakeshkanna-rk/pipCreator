@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import importlib.metadata
 
 from textPlay.colors import *
 
@@ -9,21 +10,22 @@ from textPlay.colors import *
 VERSION = 'v0.1.0'
 author = 'Rakesh Kanna'
 title = f'\n\t{CYAN}PIP CREATOR{RESET} {VERSION}\n'
+tic = f"{BOLD}{BRIGHT_GREEN}√{RESET} "
 
 check_directory_err = f"{RED}Files exist in the directory. Try another directory or delete these files.{RESET}"
 
-readme_success = f"{GREEN}README.md created successfully. ✔{RESET}"
-setuppy_success = f"{GREEN}setup.py created successfully. ✔{RESET}"
-setupcfg_success = f"{GREEN}setup.cfg created successfully. ✔{RESET}"
-pyprojecttoml_success = f"{GREEN}pyproject.toml created successfully. ✔{RESET}"
-requirements_success = f"{GREEN}requirements.txt created successfully. ✔{RESET}"
-gitignore_success = f"{GREEN}.gitignore created successfully. ✔{RESET}"
-license_success = f"{GREEN}License created successfully. ✔{RESET}"
+readme_success = f"{tic}README.md created successfully."
+setuppy_success = f"{tic}setup.py created successfully."
+setupcfg_success = f"{tic}setup.cfg created successfully."
+pyprojecttoml_success = f"{tic}pyproject.toml created successfully."
+requirements_success = f"{tic}requirements.txt created successfully."
+gitignore_success = f"{tic}.gitignore created successfully."
+license_success = f"{tic}License created successfully."
 
 
-files_success = f"\n{GREEN}All files created successfully. ✔{RESET}"
+files_success = f"\n{tic}All files created successfully."
 ready_to_code = "Your project folder is ready to code."
-file_written_check = f"{GREEN}Files Written successfully. ✔{RESET}"
+file_written_check = f"{tic}Files Written successfully."
 
 
 crtfd_msg = "Creating folder... → "
@@ -43,13 +45,13 @@ wrt_prog_requirements = "Writing requirements.txt files... → "
 wrt_prog_gitignore = "Writing .gitignore files... → "
 wrt_prog_license = "Writing LICENSE files... → "
 
-wrt_prog_remd_ovr = f"{GREEN}README.md written successfully. ✔{RESET}"
-wrt_prog_setuppy_ovr = f"{GREEN}setup.py written successfully. ✔{RESET}"
-wrt_prog_setupcfg_ovr = f"{GREEN}setup.cfg written successfully. ✔{RESET}"
-wrt_prog_pyprojecttoml_ovr = f"{GREEN}pyproject.toml written successfully. ✔{RESET}"
-wrt_prog_requirements_ovr = f"{GREEN}requirements.txt written successfully. ✔{RESET}"
-wrt_prog_gitignore_ovr = f"{GREEN}.gitignore written successfully. ✔{RESET}"
-wrt_prog_license_ovr = f"{GREEN}LICENSE written successfully. ✔{RESET}"
+wrt_prog_remd_ovr = f"{tic} README.md written successfully."
+wrt_prog_setuppy_ovr = f"{tic}setup.py written successfully."
+wrt_prog_setupcfg_ovr = f"{tic}setup.cfg written successfully."
+wrt_prog_pyprojecttoml_ovr = f"{tic}pyproject.toml written successfully."
+wrt_prog_requirements_ovr = f"{tic}requirements.txt written successfully."
+wrt_prog_gitignore_ovr = f"{tic}.gitignore written successfully."
+wrt_prog_license_ovr = f"{tic}LICENSE written successfully."
 
 footer = f"{author}\n{CYAN}Happy Coding!{RESET}"
 
@@ -136,38 +138,50 @@ def erase_bar(progress, length=50, symbol='█', empty_symbol='-', messages=None
 
 
 #
-def options():
+def options(proj_name):
+
+    name = True
+    while name:
+        projname = input(f"{CYAN}Enter project name {RESET}[{proj_name}] ")
+        if not projname:
+            projname = proj_name
+        name = False
+
     desc = True
     while desc:
-        description = input(f"{CYAN}Enter a description for your project: {RESET}")
+        description = input(f"{CYAN}Enter a description for your project {RESET}")
         desc = False
 
     keyw = True
     while keyw:
-        keywords = input(f"{CYAN}Enter keywords for your project: {RESET}")
+        keywords = input(f"{CYAN}Enter keywords for your project {RESET}")
         keyw = False
 
     auth = True
     while auth:
-        author = input(f"{CYAN}Enter author name: {RESET}")
+        author = input(f"{CYAN}Enter author name {RESET}")
         auth = False
 
     auth_mail = True
     while auth_mail:
-        author_mail = input(f"{CYAN}Enter author email: {RESET}")
+        author_mail = input(f"{CYAN}Enter author email {RESET}")
         auth_mail = False
 
     lic = True
     while lic:
-        licence = input(f"{CYAN}Enter license for your project: {RESET}")
+        licence = input(f"{CYAN}Enter license for your project {RESET}[MIT] ")
+        if not licence:
+            licence = 'MIT'
         lic = False
 
     dep = True
     while dep:
-        dependencies = input(f"{CYAN}Any dependencies for your project: {RESET}")
+        dependencies = input(f"{CYAN}Any dependencies for your project {RESET}")
+        if not dependencies:
+            dependencies = "pipCreator"
         dep = False
 
-    return description, keywords, author, author_mail, licence, dependencies
+    return projname, description, keywords, author, author_mail, licence, dependencies
 
 
 def check_folder_contents(dir_path, proj_name):
@@ -223,8 +237,11 @@ requirements.txt
 ''')
     
 
-
-def setuppy_writer(description, keywords, author, author_mail, proj_name, licence):
+# SETUP.PY FILES
+def setuppy_writer(description, keywords, author, author_mail, proj_name, licence, dependencies):
+    
+    entry_points ='{"console_scripts":["'+proj_name+' = '+proj_name+':main"]}'
+    
     setuppy = f'''
 from setuptools import setup, find_packages
 
@@ -237,50 +254,59 @@ setup(
     description="{description}",
     author="{author}",
     author_email='{author_mail}',
-    licence="{licence}",
+    license="{licence}",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
     keywords={keywords},
+    install_requires=
+        {dependencies.split()},
+    entry_points={entry_points}
 )
 '''
     return setuppy
 
-def setupcfg_writer(description, keywords, author, author_mail, proj_name, licence):
-    keywords = ', '.join(keywords.split())
-    setupcfg = f'''
-[metadata]
-name = {proj_name}
-version = 0.1.0
-description = {description}
-author = {author}
-author_email = {author_mail}
-license = {licence}
-keywords = {keywords}
 
-[options]
-packages = find:
-python_requires = >=3.6
-'''
-    return setupcfg
+# CREATE PYPROJECT.TOML
+def get_package_version(package_name):
+    try:
+        return f"{package_name}>={importlib.metadata.version(package_name)}"
+    except importlib.metadata.PackageNotFoundError:
+        return f"{package_name}"
 
-def pyprojecttoml_writer(description, keywords, author, author_mail, proj_name, licence):
+# TODO : If One dependency make a error on writting file
+def pyprojecttoml_writer(description, keywords, author, author_mail, proj_name, licence, dependencies):
     keywords = keywords.split()
+    dependencies = dependencies.split() 
+    dependencies = " ".join(get_package_version(pkg) for pkg in dependencies)
+    licence_ = '{text= "'+licence+'"}' # license = {text = "mit"}
+    authors = '[{name= "'+author+'", email= "'+author_mail+'"}]'
+    # [{ name = "Rakesh Kanna", email = "rakeshkanna0108@gmail.com" }]
     pyprojecttoml = f'''
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "{proj_name}"
 version = "0.1.0"
 description = "{description}"
-author = "{author}"
-author_email = "{author_mail}"
-license = "{licence}"
+authors =  {authors}
+license = {licence_}
+readme = "README.md"
+requires-python = ">=3.8"
 keywords = {keywords}
-[tool.poetry.dependencies]
-python = ">=3.6"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+dependencies = {dependencies.split(" ")}
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: {licence} License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+my_script = "{proj_name}:main"
 '''
 
     return pyprojecttoml

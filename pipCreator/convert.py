@@ -6,10 +6,25 @@ import toml
 import re
 
 from textPlay.colors import *
-from textPlay.backend import backend_suppress
+# from textPlay.backend import backend_suppress
 from pipcreator.constants import check_folder_contents
 from pipcreator.constants import footer
-from pipcreator.constants import exit_msg, invalid_input
+from pipcreator.constants import tic, invalid_input
+
+def backend_suppress(command):
+    try:
+        result = subprocess.run(command.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.stderr:
+            print("Command Errors/Warnings:")
+            print(result.stderr)
+        result.check_returncode()  # Raises CalledProcessError if the command failed
+    except subprocess.CalledProcessError as e:
+        print(f"Error: Command '{' '.join(e.cmd)}' failed with return code {e.returncode}.")
+        print(f"Output: {e.output}")
+        print(f"Error: {e.stderr}")
+        sys.exit(1)
+
+
 
 def convert(command):
     loop = True
@@ -17,8 +32,9 @@ def convert(command):
         conform = input(f"Are you sure you want to convert to distribution file? (y/n) [{CYAN}Y{RESET}]: ")
         if conform.lower() == 'y' or conform.lower() == '' or conform.lower() == 'yes':
             try:
+                print(f"Converting files...")
                 backend_suppress(command)
-                print(f"\n{GREEN}√ Files Converted successfully.{RESET}")
+                print(f"\n{tic}Files Converted successfully.")
             except Exception as e:
                 print(f"{RED}Error on converting... {e}{RESET}")
 
@@ -51,15 +67,16 @@ def run_setup_command_convert():
 
     elif folder_complete == True:
         time.sleep(1.0)
-        print(f"{GREEN}√ Folder contains all required files.{RESET}")
+        print(f"{tic}Folder contains all required files.")
         try:
             if os.path.exists('pyproject.toml'):
-                print(f"{GREEN}√ pyproject.toml found.{RESET}")
+                print(f"{tic}pyproject.toml found.")
                 loop = True
                 while loop:
                     upd_version = input(f"Update version number? (y/n) [{CYAN}Y{RESET}]: ")
                     if upd_version.lower() == 'y' or upd_version == 'yes'  or upd_version == '':
                         update_toml()
+                        print(f"\n{tic}pyproject.toml updated.")
                         loop = False
 
                     elif upd_version.lower() == 'n' or upd_version == 'no':
@@ -67,16 +84,16 @@ def run_setup_command_convert():
 
                     else:
                         print(invalid_input)
-                print(f"\n{GREEN}√ pyproject.toml updated.{RESET}")
 
 
             elif os.path.exists('setup.py'):
-                print(f"{GREEN}√ setup.py found.{RESET}")
+                print(f"{tic}setup.py found.")
                 loop = True
                 while loop:
                     upd_version = input(f"Update version number? (y/n) [{CYAN}Y{RESET}]: ")
                     if upd_version.lower() == 'y' or upd_version == 'yes'  or upd_version == '':
                         update_setup()
+                        print(f"\n{tic}setup.py updated.{RESET}")
                         loop = False
 
                     elif upd_version.lower() == 'n' or upd_version == 'no':
@@ -84,7 +101,6 @@ def run_setup_command_convert():
 
                     else:
                         print(invalid_input)
-                print(f"\n{GREEN}√ setup.py updated.{RESET}")
 
             else:
                 print(f"{RED}Error: setup.py or pyproject.toml not found.{RESET}")
@@ -116,7 +132,7 @@ def write_toml(file_path, toml_data):
     with open(file_path, 'w') as f:
         toml.dump(toml_data, f)
 
-def update_toml(file_path):
+def update_toml(file_path='pyproject.toml'):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
     else:

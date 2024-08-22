@@ -7,7 +7,7 @@ from .writer import pip_creator
 # OTHER FUNCTIONS
 from .writer import create_gitignore, create_license
 from .writer import create_pyprojecttoml, create_readme
-from .writer import create_requirements, create_setupcfg, create_setuppy
+from .writer import create_requirements, create_setuppy
 
 # CONVERT
 from .convert import run_setup_command_convert
@@ -22,7 +22,7 @@ __cli__ = ["pip_creator"]
 
 __others__ = ["create_gitignore", "create_license", 
               "create_pyprojecttoml", "create_readme", 
-              "create_requirements", "create_setupcfg", "create_setuppy"]
+              "create_requirements", "create_setuppy"]
 
 __convert__ = ["run_setup_command"]
 

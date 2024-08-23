@@ -328,7 +328,7 @@ def pip_creator():
             sys.exit(0)
 
     else:
-        if "." in directory[-3:]:
+        if "." in directory[-3:]: # TODO : Try with passing a parameter --file to create a file
             if os.path.exists(directory):
                 print(f"{RED}File already exists.{RESET}")
                 sys.exit(1)

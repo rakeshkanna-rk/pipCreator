@@ -58,13 +58,31 @@ footer = f"{author}\n{CYAN}Happy Coding!{RESET}"
 invalid_input = f"{RED}Invalid input. Please enter 'y' or 'n'.{RESET}"
 exit_msg = f"{RED}Exiting the program.{RESET}\n"
 
-def lst_file_display(project, setup):
-    lst_file = f'''
+def lst_file_display(project, setup, test=False):
+    if not test:
+        lst_file = f'''
 {project}/
 │
 ├── {project}/
 │   ├── __init__.py
 │   └── main.py
+│
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── .gitignore
+└── {setup}
+'''
+    elif test:
+        lst_file = f'''
+{project}/
+│
+├── {project}/
+│   ├── __init__.py
+│   └── main.py
+│
+├── test/
+│   └── test.py
 │
 ├── README.md
 ├── LICENSE
@@ -137,7 +155,7 @@ def erase_bar(progress, length=50, symbol='█', empty_symbol='-', messages=None
 
 
 
-#
+# OPTIONS
 def options(proj_name):
 
     name = True
@@ -150,21 +168,31 @@ def options(proj_name):
     desc = True
     while desc:
         description = input(f"{CYAN}Enter a description for your project {RESET}")
+        if not description:
+            description = "No description"
         desc = False
 
     keyw = True
     while keyw:
         keywords = input(f"{CYAN}Enter keywords for your project {RESET}")
+        if not keywords:
+            keywords = "NoKeywords"
         keyw = False
 
     auth = True
     while auth:
         author = input(f"{CYAN}Enter author name {RESET}")
+        if not author:
+            print(f"{RED}Author name cannot be empty.{RESET}")
+            continue
         auth = False
 
     auth_mail = True
     while auth_mail:
         author_mail = input(f"{CYAN}Enter author email {RESET}")
+        if not author_mail:
+            print(f"{RED}Author email cannot be empty.{RESET}")
+            continue
         auth_mail = False
 
     lic = True
@@ -177,16 +205,15 @@ def options(proj_name):
     dep = True
     while dep:
         dependencies = input(f"{CYAN}Any dependencies for your project {RESET}")
-        if not dependencies:
-            dependencies = "pipCreator"
         dep = False
 
     return projname, description, keywords, author, author_mail, licence, dependencies
 
 
+# CHECK FOLDER
 def check_folder_contents(dir_path, proj_name):
-    required_files = [proj_name, 'LICENSE', 'README.md', 'requirements.txt']
-    setup_files = ['setup.py', 'setup.cfg', 'pyproject.toml']
+    required_files = ['LICENSE', 'README.md', 'requirements.txt']
+    setup_files = ['setup.py', 'pyproject.toml']
     
     folder_files = os.listdir(dir_path)
     
@@ -202,39 +229,6 @@ def check_folder_contents(dir_path, proj_name):
         if not setup_present:
             missing_files.append("At least one setup file needed")
         return False, missing_files
-
-
-def file_printer(readme, setup, setup_read, requirements, gitignore_fh, init, main, proj_name):
-    print(f'''
---------------------------------
-{setup}
-{setup_read}
---------------------------------
-
---------------------------------
-README.md
-{readme}
---------------------------------
-
---------------------------------
-requirements.txt
-{requirements}
-
---------------------------------
-.gitignore
-{gitignore_fh}
---------------------------------
-
---------------------------------
-{proj_name}/__init__.py
-{init} 
---------------------------------
-
---------------------------------
-{proj_name}/main.py
-{main}
---------------------------------
-''')
     
 
 # SETUP.PY FILES
@@ -277,8 +271,12 @@ def get_package_version(package_name):
 # TODO : If One dependency make a error on writting file
 def pyprojecttoml_writer(description, keywords, author, author_mail, proj_name, licence, dependencies):
     keywords = keywords.split()
-    dependencies = dependencies.split() 
-    dependencies = " ".join(get_package_version(pkg) for pkg in dependencies)
+    if not dependencies:
+        dependencies = ""
+    else:
+        dependencies = dependencies.split() 
+        dependencies = " ".join(get_package_version(pkg) for pkg in dependencies)
+        dependencies = f'dependencies = {dependencies.split(" ")}'
     licence_ = '{text= "'+licence+'"}' # license = {text = "mit"}
     authors = '[{name= "'+author+'", email= "'+author_mail+'"}]'
     # [{ name = "Rakesh Kanna", email = "rakeshkanna0108@gmail.com" }]
@@ -297,7 +295,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 keywords = {keywords}
 
-dependencies = {dependencies.split(" ")}
+{dependencies}
 
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -327,51 +325,3 @@ def main():
     print("Hello, World!")
 '''
     return main
-
-
-# test/test.py
-def test_writer(proj_name):
-    test = f'''
-import unittest
-from {proj_name} import hello 
-
-# Define a test class
-class TestHelloFunction(unittest.TestCase):
-
-    # Define a test method to test hello() function
-    def test_hello(self):
-        # Call the hello() function
-        result = hello()
-
-        # Assert the result
-        self.assertEqual(result, "Hello, World!")
-
-if __name__ == '__main__':
-    unittest.main()
-
-'''
-    return test
-
-def test_show_writer(proj_name):
-    test_show =f'''
---------------------------------
-test/test.py
---------------------------------
-import unittest
-from {proj_name} import hello 
-
-# Define a test class
-class TestHelloFunction(unittest.TestCase):
-
-    def test_hello(self):
-        # Call the hello() function
-        result = hello()
-
-        # Assert the result
-        self.assertEqual(result, "Hello, World!")
-
-if __name__ == '__main__':
-    unittest.main()
---------------------------------
-'''
-    return test_show

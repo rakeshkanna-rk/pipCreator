@@ -43,7 +43,9 @@ def create_setuppy(directory, description, keywords, author, author_mail, proj_n
 
 
 # CREATE PYPROJECT.TOML
-def create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies):
+def create_pyprojecttoml(
+        directory, description, keywords, 
+        author, author_mail, proj_name, licence, dependencies):
     with open(os.path.join(directory, 'pyproject.toml'), 'w') as f:
         pyprojecttoml = pyprojecttoml_writer(description, keywords, author, author_mail, proj_name, licence, dependencies)
         f.write(pyprojecttoml)
@@ -52,7 +54,7 @@ def create_pyprojecttoml(directory, description, keywords, author, author_mail, 
 
 
 # CREATE REQUIREMENTS.TXT
-def create_requirements(directory, requirements):
+def create_requirements(directory, requirements: str):
     requirements = requirements.split()
     with open(os.path.join(directory, 'requirements.txt'), 'w') as f:
         for dependency in requirements:
@@ -103,6 +105,24 @@ def folders(directory, proj_name, folder_name):
 # CREATE FILES AND FOLDERS
 def create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies): 
 
+    # TEST
+    test = input(f"\nDo you want to create a test folder? (y/n) [{CYAN}Y{RESET}] ")
+    if not test:
+        test = "Y"
+
+    # INIT GIT
+    git = input(f"\nDo you want to initialize git? (y/n) [{CYAN}Y{RESET}] ")
+    if not git:
+        git = "Y"
+
+    if git.lower() == 'y' or git.lower() == 'yes':
+        from  textPlay import backend_exec 
+        try:
+            backend_exec("git init")
+        except Exception as e:
+            print(f"{BOLD}{RED}Error: {e}{RESET}")
+
+    # SETUP TYPE
     print(f"\nSetup Types: {BOLD}{GREEN}setup.py {YELLOW}pyproject.toml{RESET}")
     setup = ""
     loop = True
@@ -131,13 +151,14 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
             break
 
 
-
+    # SETUP FILE DEFAULT
     if setup == "":
         print(f"{DIM}{YELLOW}No setup file created{RESET}\n{YELLOW}●{RESET} Defaulting to create pyproject.toml\n")
         pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
         setup = "pyproject.toml"
         time.sleep(0.5)
 
+    # MAIN FILES
     readme = create_readme(directory, description, proj_name)
     time.sleep(0.5)
     gitignore_fh = create_gitignore(directory)
@@ -152,7 +173,18 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
     # CREATING FOLDERS
     init, main = folders(directory, proj_name, folder_name)
 
-    print(lst_file_display(proj_name, setup))
+
+    # CREATING TEST FOLDER
+    if test.lower() == 'y' or test.lower() == 'yes':
+        os.makedirs(os.path.join(directory, 'test'))
+        with open(os.path.join(directory, 'test', 'test.py'), 'w') as f:
+            test = f"# {proj_name}/test/test.py\n"
+            f.write(test)
+            print(f"{tic}{proj_name}/test/test.py created successfully.{RESET}")
+            time.sleep(0.5)
+        test = True
+
+    print(lst_file_display(proj_name, setup, test))
 
     print(f"{files_success}\n{ready_to_code}")
     print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
@@ -189,8 +221,7 @@ def check_directory(directory, proj_name):
     else:
         # Check if directory is empty
         if not os.listdir(directory):
-            description, keywords, author, author_mail, licence, dependencies = options()
-            print("Creating files and folders...", end="\r")
+            proj_name, description, keywords, author, author_mail, licence, dependencies = options(proj_name)
             time.sleep(1.0)
             create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
         else:
@@ -205,9 +236,11 @@ def pip_creator():
         print("Usage: pipcreator create <directory>")
         sys.exit(1)
 
+    directory = sys.argv[2]
+    proj_name = os.path.basename(directory)
+
     folder_name = ascii_lowercase + ascii_uppercase + digits + '_./'
 
-    directory = sys.argv[2]
 
     if "-" in directory:
         print(f"{YELLOW}The ' - ' will be replaced as '_' in the folder name{RESET}")
@@ -223,6 +256,88 @@ def pip_creator():
     if directory == '.' or directory == './':
         directory = os.getcwd()
 
+    elif directory.lower() == "readme.md":
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+        loop = True
+        while loop:
+            name = input(f"{BLUE}Project name {RESET}[{proj_name}]")
+            if not name:
+                name = proj_name
+            desc = input("Description: ")
+            if not desc:
+                desc = " "
+            loop = False
+        print(f"Creating {directory}...")
+        create_readme(".", desc, name)
+        sys.exit(0)
+
+    elif directory.lower == "pyproject.toml":
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+
+        projname, description, keywords, author, author_mail, licence, dependencies = options(proj_name)
+        print(f"Creating {directory}...")
+        create_pyprojecttoml(".", description, keywords, author, author_mail, projname, licence, dependencies)
+        sys.exit(0)
+
+    elif directory.lower() == "setup.py":
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+
+        projname, description, keywords, author, author_mail, licence, dependencies = options(proj_name)
+        print(f"Creating {directory}...")
+        create_setuppy(".", description, keywords, author, author_mail, projname, licence, dependencies)
+        sys.exit(0)
+
+    elif directory.lower() == "requirements.txt":
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+
+        dependencies = input(f"{BLUE}Any dependencies for your project {RESET}")
+        print(f"Creating {directory}...")
+        create_requirements(".", dependencies)
+        sys.exit(0)
+
+    elif directory.lower() == ".gitignore":
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+
+        print(f"Creating {directory}...")
+        create_gitignore(".")
+        sys.exit(0)
+
+    elif directory.lower() == "test.py":
+        if os.path.exists("test"):
+            print(f"{RED}Directory already exists.{RESET}")
+            if os.path.exists("test/test.py"):
+                print(f"{RED}File already exists.{RESET}")
+                sys.exit(1)
+            print(f"Creating {directory}...")
+            os.makedirs(os.path.join(directory, 'test'))
+            with open(os.path.join(directory, 'test', 'test.py'), 'w') as f:
+                test = f"# {proj_name}/test/test.py\n"
+                f.write(test)
+                print(f"{tic}{proj_name}/test/test.py created successfully.{RESET}")
+            
+            sys.exit(0)
+
+    else:
+        if "." in directory[-3:]:
+            if os.path.exists(directory):
+                print(f"{RED}File already exists.{RESET}")
+                sys.exit(1)
+            print(f"Creating {directory}...")
+            with open(directory, 'w') as f:
+                f.write(" ")
+                print(f"{tic}{directory} created successfully.{RESET}")
+                sys.exit(0)
+        
     proj_name = os.path.basename(directory)
 
     print(f'Creating project @ {BLUE}{directory}{RESET}\n')

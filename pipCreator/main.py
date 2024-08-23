@@ -4,7 +4,6 @@ from pipcreator.writer import pip_creator
 from pipcreator.convert import run_setup_command_convert
 from pipcreator.upload import run_setup_command_upload
 from pipcreator.guide import guide_learn
-from pipcreator.createtest import test_folder
 from pipcreator.constants import title
 
 @click.group()
@@ -17,11 +16,6 @@ def cli():
 def create(directory):
     directory = str(directory)
     pip_creator()
-
-
-@click.command()
-def create_test():
-    test_folder()
 
 @click.command()
 def convert():
@@ -39,4 +33,3 @@ cli.add_command(create)
 cli.add_command(convert)
 cli.add_command(upload)
 cli.add_command(guide)
-cli.add_command(create_test)

@@ -5,11 +5,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pipCreator",
-    version="0.1.0b0",
+    version="0.1.0b1",
     description="This creates all the necessary files for creating a python package.",
     author="Rakesh Kanna",
     author_email='rakeshkanna0108@gmail.com',
-    licence="MIT",
+    license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
@@ -27,7 +27,7 @@ setup(
         "wheel"],
     entry_points={
         'console_scripts': 
-            ['pipcreator = pipcreator:cli'],
+            ['pipc = pipcreator:cli'],
         },
     classifiers=[
         'Programming Language :: Python :: 3',

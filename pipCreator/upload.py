@@ -54,27 +54,9 @@ def run_setup_command_upload():
     proj_name = os.path.basename(directory)
     print(f"Project name: {YELLOW}{proj_name}{YELLOW}\n")
 
-    print(f"\n{YELLOW}Make sure you have an account and genrated an API key at https://pypi.org{YELLOW}")
-
-    loop = True
-    while loop:
-        conform = input("Did you convert the files to sdist and bdist? (y/n): ")
-        if conform.lower() == 'y':
-            loop = False
-        
-        elif conform.lower() == 'n':
-            print(f"USE: {MAGENTA}pipcreator convert{YELLOW}")
-            print(f"{RED}\nCommand cancelled.\n{exit_msg}{YELLOW}")
-            print(f"\n{footer}")
-            loop = False  
-            sys.exit()      
-
-        else:
-            print(invalid_input)
-
+    print(f"\n{YELLOW}Make sure you have an account and genrated an API key at {BLUE}https://pypi.org{YELLOW}")
 
     folder_complete, missing_files = check_folder_contents(directory, proj_name)
-
 
     if folder_complete == False:
         time.sleep(1.0)

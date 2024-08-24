@@ -1,5 +1,3 @@
-# TODO : Correct All Funtion and ERRORS
-
 import os
 import sys
 import time
@@ -92,7 +90,7 @@ def folders(directory, proj_name, folder_name):
     with open(os.path.join(directory, folder_name, 'main.py'), 'w') as f:
         main = main_writer()
         f.write(main)
-        print(f"{tic}{proj_name}/main.py created successfully.{RESET}\n")
+        print(f"{tic}{proj_name}/main.py created successfully.{RESET}")
         time.sleep(0.5)
 
     return init, main
@@ -111,7 +109,7 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
         test = "Y"
 
     # INIT GIT
-    git = input(f"\nDo you want to initialize git? (y/n) [{CYAN}Y{RESET}] ")
+    git = input(f"Do you want to initialize git? (y/n) [{CYAN}Y{RESET}] ")
     if not git:
         git = "Y"
 
@@ -184,9 +182,11 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
             time.sleep(0.5)
         test = True
 
+    print(files_success)
+    time.sleep(0.5)
     print(lst_file_display(proj_name, setup, test))
-
-    print(f"{files_success}\n{ready_to_code}")
+    time.sleep(0.5)
+    print(ready_to_code)
     print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
     print(footer)
 
@@ -219,25 +219,41 @@ def check_directory(directory, proj_name):
                 print(invalid_input)
 
     else:
-        # Check if directory is empty
-        if not os.listdir(directory):
-            proj_name, description, keywords, author, author_mail, licence, dependencies = options(proj_name)
-            time.sleep(1.0)
-            create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
-        else:
-            print(check_directory_err)
-            list_dir(directory)
+        try:
+            # Check if directory is empty
+            if not os.listdir(directory):
+                proj_name, description, keywords, author, author_mail, licence, dependencies = options(proj_name)
+                time.sleep(1.0)
+                create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
+            else:
+                print(check_directory_err)
+                list_dir(directory)
 
+        except Exception as e:
+            print(f"{BOLD}{RED}ERROR: {RESET}{e}")
+
+def file_proj_name():
+    directory = os.getcwd()
+    proj_name = os.path.basename(directory)
+    return proj_name
 
 # MAIN (PIP CREATOR)
-def pip_creator():
+def pip_creator(directory, file):
 
-    if len(sys.argv) != 3:
-        print("Usage: pipcreator create <directory>")
-        sys.exit(1)
+    # if len(sys.argv) > 4 or len(sys.argv) < 3:
+    #     print("Usage: pipcreator create <directory> ")
+    #     sys.exit(1)
 
-    directory = sys.argv[2]
-    proj_name = os.path.basename(directory)
+
+    if file:
+        if os.path.exists(directory):
+            print(f"{RED}File already exists.{RESET}")
+            sys.exit(1)
+        print(f"Creating {directory}...")
+        with open(directory, 'w') as f:
+            f.write(" ")
+            print(f"{tic}{directory} created successfully.{RESET}")
+            sys.exit(0)
 
     folder_name = ascii_lowercase + ascii_uppercase + digits + '_./'
 
@@ -253,6 +269,7 @@ def pip_creator():
         print(footer)
         sys.exit(1)
 
+    proj_name = file_proj_name()
     if directory == '.' or directory == './':
         directory = os.getcwd()
 
@@ -265,7 +282,7 @@ def pip_creator():
             name = input(f"{BLUE}Project name {RESET}[{proj_name}]")
             if not name:
                 name = proj_name
-            desc = input("Description: ")
+            desc = input(f"{BLUE}Description: {RESET}")
             if not desc:
                 desc = " "
             loop = False
@@ -273,7 +290,7 @@ def pip_creator():
         create_readme(".", desc, name)
         sys.exit(0)
 
-    elif directory.lower == "pyproject.toml":
+    elif directory.lower() == "pyproject.toml":
         if os.path.exists(directory):
             print(f"{RED}File already exists.{RESET}")
             sys.exit(1)
@@ -326,21 +343,10 @@ def pip_creator():
                 print(f"{tic}{proj_name}/test/test.py created successfully.{RESET}")
             
             sys.exit(0)
-
-    else:
-        if "." in directory[-3:]: # TODO : Try with passing a parameter --file to create a file
-            if os.path.exists(directory):
-                print(f"{RED}File already exists.{RESET}")
-                sys.exit(1)
-            print(f"Creating {directory}...")
-            with open(directory, 'w') as f:
-                f.write(" ")
-                print(f"{tic}{directory} created successfully.{RESET}")
-                sys.exit(0)
         
     proj_name = os.path.basename(directory)
 
-    print(f'Creating project @ {BLUE}{directory}{RESET}\n')
+    print(f'Creating project @ {BLUE}{os.getcwd()}{RESET}\n')
 
     check_directory(directory, proj_name)
 

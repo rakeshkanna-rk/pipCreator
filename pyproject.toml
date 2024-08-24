@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pipCreator"
-version = "0.1.0b0"
+version = "0.1.0b1"
 description = "This creates all the necessary files for creating a python package."
 authors = ["Rakesh Kanna <rakeshkanna0108@gmail.com>"]
 license = "MIT"

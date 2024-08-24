@@ -61,6 +61,7 @@ exit_msg = f"{RED}Exiting the program.{RESET}\n"
 def lst_file_display(project, setup, test=False):
     if not test:
         lst_file = f'''
+{BOLD}Project Structure{RESET}
 {project}/
 │
 ├── {project}/
@@ -268,7 +269,7 @@ def get_package_version(package_name):
     except importlib.metadata.PackageNotFoundError:
         return f"{package_name}"
 
-# TODO : If One dependency make a error on writting file
+
 def pyprojecttoml_writer(description, keywords, author, author_mail, proj_name, licence, dependencies):
     keywords = keywords.split()
     if not dependencies:

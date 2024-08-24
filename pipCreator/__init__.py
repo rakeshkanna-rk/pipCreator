@@ -18,18 +18,23 @@ from .upload import run_setup_command_upload
 # GUIDE
 from .guide import guide_learn
 
-__cli__ = ["pip_creator"]
+# PACKAGE MANGEMENT
+from .install import install_package, uninstall_package, update_package
 
-__others__ = ["create_gitignore", "create_license", 
-              "create_pyprojecttoml", "create_readme", 
-              "create_requirements", "create_setuppy"]
+__create__ = ["pip_creator"]
 
-__convert__ = ["run_setup_command"]
+__create_files__ = ["create_gitignore", "create_license", 
+                    "create_pyprojecttoml", "create_readme", 
+                    "create_requirements", "create_setuppy"]
+
+__build__ = ["run_setup_command"]
 
 __upload__ = ["run_setup_command_upload"]
 
 __guide__ = ["guide_learn"]
 
-__all__ = __cli__ + __others__  + __convert__ + __upload__ + __guide__
+__package__ = ["install_package", "uninstall_package", "update_package"]
+
+__all__ = __create__ + __create_files__  + __build__ + __upload__ + __guide__ + __package__
 
 # TODO : New functions git-push, create-env, install dependencies automatically, create pipcreator.lock

@@ -19,7 +19,7 @@ from .upload import run_setup_command_upload
 from .guide import guide_learn
 
 # PACKAGE MANGEMENT
-from .install import install_package, uninstall_package, update_package
+from .install import install_package, uninstall_package, update_package # TODO Add all functions
 
 __create__ = ["pip_creator"]
 

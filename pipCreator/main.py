@@ -11,6 +11,7 @@ from pipcreator.upload import run_setup_command_upload
 from pipcreator.guide import guide_learn
 from pipcreator.constants import title, footer
 from pipcreator.install import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
+from pipCreator.git import git_clone_repository, git_commit_and_push
 
 @click.group()
 def cli():
@@ -92,6 +93,23 @@ def show(package):
     show_package_info(package)
 
 
+@click.command()
+@click.option('--repo-url',default=False, help='Repository URL to clone')
+@click.option('--path', default=None, help='Path to Save Repository')
+def clone(repo_url, path):
+    if repo_url:
+        if not path:
+            path = os.getcwd()
+            git_clone_repository(repo_url, path)
+    else:
+        print("Please specify a repository URL with --repo-url")
+
+
+@click.command()
+@click.option("--msg", "-m", default=None, help="Commit message")
+def commit(msg):
+    git_commit_and_push(msg)
+
 
 cli.add_command(create)
 cli.add_command(convert)
@@ -103,3 +121,5 @@ cli.add_command(update)
 cli.add_command(search)
 cli.add_command(list)
 cli.add_command(show)
+cli.add_command(clone)
+cli.add_command(commit)

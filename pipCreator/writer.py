@@ -1,10 +1,11 @@
 import os
 import sys
 import time
+import subprocess
 from string import ascii_lowercase, ascii_uppercase, digits
 
 from textPlay.colors import *
-from textPlay.files import write_file, list_dir
+from textPlay import write_file, list_dir
 
 # CONSTANTS
 from pipcreator.constants import *
@@ -95,6 +96,24 @@ def folders(directory, proj_name, folder_name):
 
     return init, main
 
+
+# VIRTUAL ENV
+def virtual_env(venv_name='venv', env=None):
+    env_build_status = False
+    if not env:
+        env = "Y"
+    if env.lower() == 'y' or env.lower() == 'yes':
+        try:
+            subprocess.check_call([sys.executable, "-m", "venv", venv_name])
+            print(f"\n{tic}Virtual environment created successfully.{RESET}")
+            time.sleep(0.5)
+            env_build_status = True
+        except Exception as e:
+            print(f"{BOLD}{RED}Error: {e}{RESET}")
+
+    return env_build_status
+
+
 #=============================================================================================
 
 
@@ -119,6 +138,24 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
             backend_exec("git init")
         except Exception as e:
             print(f"{BOLD}{RED}Error: {e}{RESET}")
+
+    if dependencies:
+        env = input(f"Do you like to create a virtual environment for your dependencies? (y/n) [{CYAN}Y{RESET}] [{MAGENTA}venv{RESET}] ")
+        if not env:
+            env = "Y"
+        if env.lower() == 'y' or env.lower() == 'yes':
+            env = True
+
+        if len(env.split()) == 2:
+            venv_name = env.split()[1]
+        else:
+            venv_name = 'venv'
+
+        
+        venv_status = virtual_env(venv_name)
+        
+
+
 
     # SETUP TYPE
     print(f"\nSetup Types: {BOLD}{GREEN}setup.py {YELLOW}pyproject.toml{RESET}")
@@ -181,6 +218,10 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
             print(f"{tic}{proj_name}/test/test.py created successfully.{RESET}")
             time.sleep(0.5)
         test = True
+
+    if venv_status:
+        print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
+        time.sleep(1.0)
 
     print(files_success)
     time.sleep(0.5)
@@ -344,6 +385,17 @@ def pip_creator(directory, file, folder):
                 print(f"{tic}{proj_name}/test/test.py created successfully.{RESET}")
             
             sys.exit(0)
+
+    elif directory.lower() == "venv":
+        if os.path.exists(directory):
+            print(f"{RED}Environment already exists.{RESET}")
+            sys.exit(1)
+
+        print(f"Creating {directory}...")
+        venv_status = virtual_env()
+        if venv_status:
+            print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
+        sys.exit(0)
         
     proj_name = os.path.basename(directory)
 

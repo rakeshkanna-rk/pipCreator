@@ -57,6 +57,8 @@ footer = f"{author}\n{CYAN}Happy Coding!{RESET}"
 
 invalid_input = f"{RED}Invalid input. Please enter 'y' or 'n'.{RESET}"
 exit_msg = f"{RED}Exiting the program.{RESET}\n"
+error = f"{BOLD}{RED}Errors: {RESET}"
+warn = f"{BOLD}{YELLOW}Warnings: {RESET}"
 
 def lst_file_display(project, setup, test=False):
     if not test:

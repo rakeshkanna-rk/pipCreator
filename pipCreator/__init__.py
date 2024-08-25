@@ -19,7 +19,7 @@ from .upload import run_setup_command_upload
 from .guide import guide_learn
 
 # PACKAGE MANGEMENT
-from .install import install_package, uninstall_package, update_package # TODO Add all functions
+from .install import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info 
 
 __create__ = ["pip_creator"]
 
@@ -33,8 +33,8 @@ __upload__ = ["run_setup_command_upload"]
 
 __guide__ = ["guide_learn"]
 
-__package__ = ["install_package", "uninstall_package", "update_package"]
+__package__ = ["install_package", "uninstall_package", "update_package", "search_pypi_package", "list_installed_packages", "show_package_info"]
 
-__all__ = __create__ + __create_files__  + __build__ + __upload__ + __guide__ + __package__
+__all__ = __create__ + __create_files__  + __build__ + __upload__ + __guide__ + __package__ 
 
 # TODO : New functions git-push, create-env, install dependencies automatically, create pipcreator.lock

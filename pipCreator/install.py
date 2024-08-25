@@ -4,6 +4,11 @@ import itertools
 import sys
 import time
 import threading
+import subprocess
+import pkg_resources
+import requests
+import textwrap
+from bs4 import BeautifulSoup
 
 from textPlay.colors import *
 from pipcreator.constants import tic, footer
@@ -359,11 +364,6 @@ def track_warnings(stderr):
 
 # SEARCH PACKAGE =========================================
 
-import requests
-import textwrap
-from bs4 import BeautifulSoup
-
-from textPlay.colors import *
 
 # Define the color codes as needed
 colors = {
@@ -405,9 +405,6 @@ def search_pypi_package(search_term):
 
 # LIST PACKAGES =========================================
 
-import pkg_resources
-
-from textPlay.colors import *
 
 def list_installed_packages():
     # Get the list of installed packages
@@ -425,9 +422,6 @@ def list_installed_packages():
 
 
 # SHOW PACKAGE INFO =========================================
-
-import subprocess
-from textPlay.colors import *
 
 
 def show_package_info(package_name):

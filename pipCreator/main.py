@@ -20,9 +20,10 @@ def cli():
 @click.command()
 @click.argument('directory')
 @click.option('--file',is_flag=True, default=False, help='Create a new file')
-def create(directory, file):
+@click.option('--folder',is_flag=True, default=False, help='Create a new folder')
+def create(directory, file, folder):
     directory = str(directory)
-    pip_creator(directory, file)
+    pip_creator(directory, file, folder)
 
 @click.command()
 def convert():

@@ -238,11 +238,12 @@ def file_proj_name():
     return proj_name
 
 # MAIN (PIP CREATOR)
-def pip_creator(directory, file):
+def pip_creator(directory, file, folder):
 
-    # if len(sys.argv) > 4 or len(sys.argv) < 3:
-    #     print("Usage: pipcreator create <directory> ")
-    #     sys.exit(1)
+    if folder:
+        os.makedirs(directory)
+        print(f"{tic}{GREEN}Folder created successfully!{RESET}")
+        sys.exit(0)
 
 
     if file:

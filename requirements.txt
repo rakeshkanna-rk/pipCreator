@@ -1,5 +1,10 @@
 click
-colorama
+requests
+textwrap
+beautifulsoup4
+toml
+textPlay
+
 twine
 setuptools
 wheel

@@ -63,7 +63,7 @@ import webbrowser
 
 def web_guide(see):
     see = see[3:].upper()
-    valid_topics = ["VENV", "CREATE", "CONVERT", "UPLOAD", "PACKAGE", "GIT"]
+    valid_topics = ["CREATE", "CONVERT", "UPLOAD", "PACKAGE", "GIT"]
     
     if see in valid_topics:
         webbrowser.open(f"https://github.com/rakeshkanna-rk/pipCreator/tree/main/guide/{see}.md")

@@ -88,7 +88,4 @@ def run_setup_command_upload():
     time.sleep(1.0)
     print(f"\n{footer}")
 
-# Run the setup command upload function
-if __name__ == "__main__":
-    run_setup_command_upload()
 

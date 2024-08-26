@@ -2,6 +2,7 @@ import subprocess
 import re
 import itertools
 import sys
+import os
 import time
 import threading
 import subprocess
@@ -107,8 +108,7 @@ def install_package(command):
     except Exception as e:
         print(f"\nError: {e}")
 
-    finally:
-        print(f"\n{footer}")
+    return installed_packages, already_installed_packages
 
 def track_installed_packages(output):
     """
@@ -446,3 +446,174 @@ def show_package_info(package_name):
             print(f"{RED}Package '{package_name}' not found.{RESET}")
     except Exception as e:
         print(f"{RED}An error occurred: {e}{RESET}")
+
+
+
+
+
+# UPDATE PACKAGE IN REQUIREMENTS and SETUP =========================================
+
+# UPDATE SETUP.PY ===============================================================
+
+def get_current_dependencies(setup_file='setup.py'):
+    with open(setup_file, 'r') as file:
+        content = file.read()
+    match = re.search(r"install_requires\s*=\s*\[(.*?)\]", content, re.DOTALL)
+    if match:
+        # Extract and clean the dependency list
+        dependencies = match.group(1).split(',')
+        dependencies = [dep.strip().strip("'\"") for dep in dependencies]
+        return dependencies
+    else:
+        raise ValueError("install_requires list not found in setup.py")
+
+def set_dependencies(new_dependencies, setup_file='setup.py'):
+    # Get the current dependencies from the file
+    current_dependencies = get_current_dependencies(setup_file)
+
+    if '' in new_dependencies:
+        new_dependencies.remove('')
+
+    if '' in current_dependencies:
+        current_dependencies.remove('')
+
+    # Merge the current dependencies with new ones
+    combined_dependencies = list(set(current_dependencies + new_dependencies))
+
+    # Format the combined dependencies list
+    formatted_deps = ', '.join([f"'{dep.strip()}'" for dep in combined_dependencies])
+
+    # Replace the install_requires list with the updated dependencies
+    with open(setup_file, 'r') as file:
+        content = file.read()
+
+    new_content = re.sub(r"install_requires\s*=\s*\[.*?\]", f"install_requires=[{formatted_deps}]", content, flags=re.DOTALL)
+
+    with open(setup_file, 'w') as file:
+        file.write(new_content)
+
+def update_setup(setup_file='setup.py', new_dependencies=[]):
+    if not os.path.exists(setup_file):
+        raise FileNotFoundError(f"File not found: {setup_file}")
+    else:
+        try:
+            print(f"Updating {setup_file}...")
+
+            # Updating dependencies in setup.py
+            set_dependencies(new_dependencies, setup_file)
+            
+            # Displaying updated dependencies
+            updated_dependencies = get_current_dependencies(setup_file)
+            print(f"{GREEN}Updated dependencies:{RESET}")
+            for dep in updated_dependencies:
+                print(f" - {dep}")
+        
+        except Exception as e:
+            print(f"{RED}Error: {e}{RESET}")
+
+
+def check_requirements(setup_file='requirements.txt', installed_now=[]):
+    if not os.path.exists(setup_file):
+        raise FileNotFoundError(f"File not found: {setup_file}")
+    else:
+        try:
+            # Read the current requirements.txt content
+            with open(setup_file, 'r') as file:
+                content = file.read().splitlines()
+                if "" in content:
+                    content.remove("")
+
+
+            updated_packages = []
+            for pkg in installed_now:
+                if '-' in pkg and '>=' not in pkg:  # Ensure it's not already using '>='
+                    name, version = pkg.split('-', 1)
+                    updated_packages.append(f"{name}>={version}")
+                else:
+                    updated_packages.append(pkg)
+
+            
+            # Find packages that are not in the requirements.txt
+            missing_packages = [pkg for pkg in updated_packages if pkg not in content]
+
+
+            if not missing_packages:
+                print(f"{tic}requirements.txt is already updated.")
+            else:
+                # Append the missing packages to requirements.txt
+                with open(setup_file, 'a') as file:
+                    if content and not content[-1].startswith('\n'):
+                        file.write('\n')
+                    for pkg in missing_packages:
+                        file.write(pkg + '\n')
+                        print(f"{tic} Added {pkg} to requirements.txt.")
+
+                print(f"{tic}requirements.txt has been updated.")
+
+                with open(setup_file, 'r') as file:
+                    content = file.read().splitlines()
+            if "" in content:
+                content.remove("")
+
+            return content
+
+        except Exception as e:
+            print(f"{RED}Error: {e}{RESET}")
+
+# UPDATE PYPROJECT.TOML ===============================================================
+
+import os
+import toml
+
+from textPlay.colors import *
+
+def read_toml(file_path):
+    with open(file_path, 'r') as f:
+        return toml.load(f)
+
+# Update a list of dependencies in the TOML data
+def update_dependencies(toml_data, dependencies_to_add):
+    # Ensure the 'project' and 'dependencies' keys exist
+    if 'project' not in toml_data:
+        toml_data['project'] = {}
+    
+    if 'dependencies' not in toml_data['project']:
+        toml_data['project']['dependencies'] = []
+
+    dependencies = toml_data['project']['dependencies']
+    
+    # Add each dependency from the list if it's not already present
+    for dep_to_add in dependencies_to_add:
+        dep_name = dep_to_add.split(">=")[0]
+        if all(dep_name != dep.split(">=")[0] for dep in dependencies):
+            dependencies.append(dep_to_add)
+    
+    toml_data['project']['dependencies'] = dependencies
+    return toml_data
+
+# Write the updated TOML data back to the file
+def write_toml(file_path, toml_data):
+    with open(file_path, 'w') as f:
+        toml.dump(toml_data, f)
+
+# Function to update a list of dependencies in pyproject.toml
+def update_toml(file_path='pyproject.toml', dependencies_to_add=None):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+    else:
+        try:
+            if dependencies_to_add is None:
+                dependencies_to_add = []
+            
+            data = read_toml(file_path)
+            print(f"Current dependencies: {data.get('project', {}).get('dependencies', [])}")
+            
+            updated_data = update_dependencies(data, dependencies_to_add)
+            write_toml(file_path, updated_data)
+            
+            print(f"{GREEN}Updated dependencies:{RESET}")
+            for dep in updated_data:
+                print(f" - {dep}")
+
+        except Exception as e:
+            print(f"{RED}Error: {e}{RESET}")

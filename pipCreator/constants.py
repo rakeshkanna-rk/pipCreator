@@ -328,3 +328,35 @@ def main():
     print("Hello, World!")
 '''
     return main
+
+
+from pipcreator.install import check_requirements, update_setup, update_toml
+
+
+def update_dependencies(installed , already_installed):
+    upd_req = input(f"\nDo you want to update requirements.txt? (y/n) [{CYAN}Y{RESET}] ")
+    if not upd_req:
+        upd_req = 'y'
+    if upd_req.lower() == 'y':
+        content = check_requirements(installed_now = installed + already_installed)
+
+    
+
+    if os.path.exists("pyproject.toml"):
+        print(f"{GREEN}Found pyproject.toml.{RESET}")
+        upd_setup = input(f"Do you want to update pyproject.toml? (y/n) [{CYAN}Y{RESET}] ")
+        if not upd_setup:
+            upd_setup = 'y'
+        if upd_setup.lower() == 'y':
+            update_toml(setup_file='pyproject.toml', new_dependencies=content)
+
+    if os.path.exists("setup.py"):
+        print(f"{GREEN}Found setup.py.{RESET}")
+        upd_setup = input(f"Do you want to update setup.py? (y/n) [{CYAN}Y{RESET}] ")
+        if not upd_setup:
+            upd_setup = 'y'
+        if upd_setup.lower() == 'y':
+            update_setup(setup_file='setup.py', new_dependencies=content)
+
+    else:
+        print(f"{RED}Error: setup.py or pyproject.toml not found.{RESET}")

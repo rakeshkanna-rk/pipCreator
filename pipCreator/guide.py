@@ -69,6 +69,3 @@ def web_guide(see):
         webbrowser.open(f"https://github.com/rakeshkanna-rk/pipCreator/tree/main/guide/{see}.md")
     else:
         print(f"{RED}Invalid topic{RESET}")
-
-# Example usage
-web_guide(see="on-create")

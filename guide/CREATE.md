@@ -50,8 +50,6 @@ pipc create README.md
 - A `README.md` file or any other template file is created in your project directory.
 - The file may include a basic template with for project description, installation instructions, and usage examples, which you can then customize.
 
-
-
 ### 3. **Setting Up a Virtual Environment**
 A virtual environment is essential for managing dependencies and ensuring your project runs in a controlled environment. You can create a virtual environment using `pipc` as well.
 

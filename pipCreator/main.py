@@ -13,6 +13,8 @@ from pipcreator.constants import title, footer, update_dependencies
 from pipcreator.package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
 from pipcreator.git import git_clone_repository, git_commit_and_push
 
+from pipCreator.flaskapp import create_flask # TODO : Change to pipcreator.flaskapp
+
 @click.group()
 def cli():
     print(title)
@@ -130,6 +132,11 @@ def clone(repo_url, path):
 def commit(msg):
     git_commit_and_push(msg)
     print(f"\n{footer}")
+
+@click.command()
+@click.argument('directory')
+def create_flask_app(directory):
+    create_flask(directory)
 
 
 cli.add_command(create)

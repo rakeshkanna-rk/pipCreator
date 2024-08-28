@@ -36,5 +36,3 @@ __guide__ = ["guide_learn"]
 __package__ = ["install_package", "uninstall_package", "update_package", "search_pypi_package", "list_installed_packages", "show_package_info", "update_toml", "update_setup", "update_dependencies"]
 
 __all__ = __create__ + __create_files__  + __build__ + __upload__ + __guide__ + __package__ 
-
-# TODO : New functions git-push, create-env, install dependencies automatically, create pipcreator.lock

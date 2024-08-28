@@ -30,21 +30,21 @@ What PIP CREATOR can do?
 4.  Install your project dependency using {code(" install <package_name>")}.
     You can also install requirements.txt dependencies using {code(" install requirements.txt")}.
     You can also update your project dependency on installation.
-    For more information, use {code(" guide --see on-install")}.
+    For more information, use {code(" guide --see on-package")}.
 
 5.  Uninstall your project dependency using {code(" uninstall <package_name>")}.
     You can also uninstall requirements.txt dependencies using {code(" install requirements.txt")}.
-    For more information, use {code(" guide --see on-uninstall")}.
+    For more information, use {code(" guide --see on-package")}.
 
 6.  Update your project dependency using {code(" update <package_name>")}.
     You can also update requirements.txt dependencies using {code(" install requirements.txt")}.
-    For more information, use {code(" guide --see on-update")}.
+    For more information, use {code(" guide --see on-package")}.
 
 7.  Search for your project dependency using {code(" search <package_name>")}.
-    For more information, use {code(" guide --see on-search")}.
+    For more information, use {code(" guide --see on-package")}.
 
 8.  List all your installed packages using {code(" list")}.
-    For more information, use {code(" guide --see on-list")}.
+    For more information, use {code(" guide --see on-package")}.
 
 9.  Git Commit and Push your project using {code(" commit -m <message>")}.
     Git Clone your project using {code(" clone <repo_url> <path_optional>")}.

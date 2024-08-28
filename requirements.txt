@@ -8,3 +8,8 @@ textPlay
 twine
 setuptools
 wheel
+
+Flask==2.3.2
+Flask-SQLAlchemy==3.0.3
+Flask-Migrate==4.0.4
+Flask-WTF==1.0.1

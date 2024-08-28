@@ -2,10 +2,14 @@ import os
 import sys
 from string import ascii_lowercase, ascii_uppercase, digits
 
-from pipCreator.constants import *
+from pipcreator.constants import *
 from pipcreator.writer import virtual_env, create_pyprojecttoml, create_readme, create_requirements, create_gitignore, create_license
+from pipcreator.flask_constants import * 
 from textPlay.colors import *
 from textPlay import list_dir
+
+from textPlay import backend_exec
+
 
 def file_proj_name():
     directory = os.getcwd()
@@ -23,92 +27,17 @@ def create_flask(directory):
     if any(char not in folder_name for char in directory):
         print(f"{RED}Invalid directory name{RESET}")
         print(f"{YELLOW}Directory name must contain only the following characters:{RESET}")
-        print("A-Z a-z 0-9 _ \n")
+        print(f"{GREEN}A to Z   {BLUE}a-z   {MAGENTA}0-9 _ \n{RESET}")
         print(footer)
         sys.exit(1)
 
-    proj_name = file_proj_name()
     if directory == '.' or directory == './':
         directory = os.getcwd()
 
+    proj_name = os.path.basename(directory)
     print(f'Creating project @ {BLUE}{os.getcwd()}{RESET}\n')
     check_directory(directory, proj_name)
 
-
-
-def create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies): 
-
-    # TEST
-    test = input(f"\nDo you want to create a test folder? (y/n) [{CYAN}Y{RESET}] ")
-    if not test:
-        test = "Y"
-
-    # INIT GIT
-    git = input(f"Do you want to initialize git? (y/n) [{CYAN}Y{RESET}] ")
-    if not git:
-        git = "Y"
-
-    if git.lower() == 'y' or git.lower() == 'yes':
-        from  textPlay import backend_exec 
-        try:
-            backend_exec("git init")
-        except Exception as e:
-            print(f"{BOLD}{RED}Error: {e}{RESET}")
-
-    if dependencies:
-        print("Creating virtual environment (venv) for safer installation...")
-        venv_status = virtual_env("venv")
-        
-    pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
-    time.sleep(0.5)
-    setup = "pyproject.toml"
-
-
-
-    # SETUP FILE DEFAULT
-    if setup == "":
-        print(f"{DIM}{YELLOW}No setup file created{RESET}\n{YELLOW}●{RESET} Defaulting to create pyproject.toml\n")
-        pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
-        setup = "pyproject.toml"
-        time.sleep(0.5)
-
-    # MAIN FILES
-    readme = create_readme(directory, description, proj_name)
-    time.sleep(0.5)
-    gitignore_fh = create_gitignore(directory)
-    time.sleep(0.5)
-    licence = create_license(directory)
-    time.sleep(0.5)
-    requirements = create_requirements(directory, dependencies)
-    time.sleep(0.5)
-    flask_app = create_app(directory, proj_name)
-
-
-    # CREATING TEST FOLDER
-    if test.lower() == 'y' or test.lower() == 'yes':
-        os.makedirs(os.path.join(directory, 'test'))
-        with open(os.path.join(directory, 'test', 'test_basic.py'), 'w') as f:
-            f.write(test_basic)
-            print(f"{tic}{proj_name}/test/test_basic.py created successfully.{RESET}")
-            time.sleep(0.5)
-
-        with open(os.path.join(directory, 'test', 'conftest.py'), 'w') as f:
-            f.write(tests_conftest)
-            print(f"{tic}{proj_name}/test/conftest.py created successfully.{RESET}")
-            time.sleep(0.5)
-        test = True
-
-    if venv_status:
-        print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
-        time.sleep(1.0)
-
-    print(files_success)
-    time.sleep(0.5)
-    print(lst_file_display(proj_name, test))
-    time.sleep(0.5)
-    print(ready_to_code)
-    print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
-    print(footer)
 
 
 # CHECK DIRECTORY
@@ -155,79 +84,212 @@ def check_directory(directory, proj_name):
             print(f"{BOLD}{RED}ERROR: {RESET}{e}")
 
 
+
+def create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies): 
+
+    # TEST
+    test = input(f"\nDo you want to create a test folder? (y/n) [{CYAN}Y{RESET}] ")
+    if not test:
+        test = "Y"
+
+    # INIT GIT
+    git = input(f"Do you want to initialize git? (y/n) [{CYAN}Y{RESET}] ")
+    if not git:
+        git = "Y"
+
+    if git.lower() == 'y' or git.lower() == 'yes':
+        from  textPlay import backend_exec 
+        try:
+            backend_exec("git init")
+        except Exception as e:
+            print(f"{BOLD}{RED}Error: {e}{RESET}")
+
+
+
+    # FLASK TEMPLATES (FLASK) ================================================
+
+    print(f"\nFlask Templates: {BOLD}{GREEN}Basic {YELLOW}Advanced (default) {BLUE}With Frameworks{RESET}")
+    flask_temp = ""
+    loop = True
+    count = 0
+    while loop:
+        basic_flask = input(f"{GREEN}●{RESET} Do you want to create a Basic Flask App? (y/n) ")
+        if basic_flask.lower() == 'y' or basic_flask.lower() == 'yes':
+            flask_temp = "Basic"
+            break
+        
+        advanced_flask = input(f"{YELLOW}●{RESET} Do you want to create a Advanced Flask App? (y/n) ")
+        if advanced_flask.lower() == 'y' or advanced_flask.lower() == 'yes':
+            flask_temp = "Advanced"
+            break
+
+        react_flask = input(f"{BLUE}●{RESET} Do you want to create a Flask App with Frameworks? (y/n) ")
+        if react_flask.lower() == 'y' or react_flask.lower() == 'yes':
+            flask_temp = "Frameworks"
+            while True:
+                print(f"\n{MAGENTA}Available frameworks:{RESET} React, Next, Vite")
+                print(f"Type the name of the framework you want to use, for other frameworks type 'others'")
+                framework = input(f"{BLUE}Which framework do you want to use? {RESET}").lower()
+                if framework == 'others':
+                    script = input("\nEnter framework comand (e.g. `npx create-next-app`): ")
+                elif framework not in ["react", "next", "vite"]:
+                    print(f"{RED}Invalid framework{RESET}")
+                    continue
+                elif framework in ["react", "next", "vite"]:
+                    script = None
+                break
+            break
+
+        count += 1  
+
+        if count == 3:
+            print("\nlimit reached")
+            print("defaulting to advanced flask app\n")
+            flask_temp = "Advanced"
+            break
+    
+    # FLASK TEMPLATES (FLASK) ================================================
+
+
+
+    # venv ====================================================================
+
+    if dependencies:
+        print("Creating virtual environment (venv) for safer installation...")
+        if flask_temp == "With React":
+            venv_status = virtual_env(venv_name=os.path.join(directory, "server", "venv"))
+        else:
+            venv_status = virtual_env("venv")
+    
+    # venv ====================================================================
+
+
+    # PYPROJECT TOML ===========================================================
+        
+    pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
+    time.sleep(0.5)
+    setup = "pyproject.toml"
+
+    # SETUP FILE DEFAULT
+    if setup == "":
+        print(f"{DIM}{YELLOW}No setup file created{RESET}\n{YELLOW}●{RESET} Defaulting to create pyproject.toml\n")
+        pyproj = create_pyprojecttoml(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
+        setup = "pyproject.toml"
+        time.sleep(0.5)
+
+    # PYPROJECT TOML ===========================================================
+
+
+    # MAIN FILES ===============================================================
+
+    readme = create_readme(directory, description, proj_name)
+    time.sleep(0.5)
+    gitignore_fh = create_gitignore(directory)
+    time.sleep(0.5)
+    licence = create_license(directory)
+    time.sleep(0.5)
+    requirements = create_requirements(directory, dependencies)
+    time.sleep(0.5)
+
+    # CREATING TEST FOLDER
+    if test.lower() == 'y' or test.lower() == 'yes':
+        os.makedirs(os.path.join(directory, 'test'))
+        with open(os.path.join(directory, 'test', 'test_basic.py'), 'w') as f:
+            f.write(test_basic)
+            print(f"{tic}{proj_name}/test/test_basic.py created successfully.{RESET}")
+            time.sleep(0.5)
+
+        with open(os.path.join(directory, 'test', 'conftest.py'), 'w') as f:
+            f.write(tests_conftest)
+            print(f"{tic}{proj_name}/test/conftest.py created successfully.{RESET}")
+            time.sleep(0.5)
+        test = True
+
+    # MAIN FILES ===============================================================
+
+
+
+    # FLASK TEMPLATES (FLASK) ================================================
+
+    if flask_temp == "Advanced":
+        flask_app = create_app(directory, proj_name)
+        time.sleep(0.5)
+    elif flask_temp == "Frameworks":
+        flask_app = create_framework_app(directory, proj_name,framework=framework, script=script)
+        time.sleep(0.5)
+    elif flask_temp == "Basic":
+        flask_app = create_app_basic(directory, proj_name)
+        time.sleep(0.5)
+
+    # FLASK TEMPLATES (FLASK) ================================================
+
+    print(files_success)
+    time.sleep(0.5)
+    print(flask_structure(proj_name, test))
+    time.sleep(0.5)
+    if venv_status:
+        print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
+        time.sleep(0.5)
+    print(ready_to_code)
+    print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
+    print(footer)
+
+
+
 def create_app(directory, proj_name):
+    try:
+        app(directory, proj_name)
 
-    os.makedirs(os.path.join(directory, 'app'))
+        template(directory,proj_name)
 
-    with open(os.path.join(directory, 'app', '__init__.py'), 'w') as f:
-        f.write(app_init)
-        print(f"{tic}{proj_name}/app/__init__.py created successfully.{RESET}")
-        time.sleep(0.5)
+        app_static(directory, proj_name)
+
+        flask_directory(directory, proj_name)
+
+
+    except Exception as e:
+        print(f"{error} {RESET}{e}")
     
-    with open(os.path.join(directory, 'app', 'routes.py'), 'w') as f:
-        f.write(app_routes)
-        print(f"{tic}{proj_name}/app/routes.py created successfully.{RESET}")
-        time.sleep(0.5)
+def create_app_basic(directory, proj_name):
+    try:
+        basic_app(directory, proj_name)
+
+        template(directory,proj_name,path = 'templates')
+
+        app_static(directory, proj_name, path = 'static')
 
 
-    with open(os.path.join(directory, 'app', 'forms.py'), 'w') as f:
-        f.write(app_forms) 
-        print(f"{tic}{proj_name}/app/forms.py created successfully.{RESET}")
-        time.sleep(0.5)
 
-    with open(os.path.join(directory, 'app', 'models.py'), 'w') as f:
-        f.write(app_models)
-        print(f"{tic}{proj_name}/app/models.py created successfully.{RESET}")
-        time.sleep(0.5)
+    except Exception as e:
+        print(f"{error} {RESET}{e}")
 
-    # TEMPLATE
-    os.makedirs(os.path.join(directory, 'app', 'templates'))
-    with open(os.path.join(directory, 'app', 'templates', 'layout.html'), 'w') as f:
-        f.write(app_template_layout)
-        print(f"{tic}{proj_name}/app/templates/layout.html created successfully.{RESET}")
-        time.sleep(0.5)
+def create_framework_app(directory, proj_name, framework = 'react', script = None):
+    try:
+        app(directory, proj_name, path="server")
 
-    with open(os.path.join(directory, 'app', 'templates', 'home.html'), 'w') as f:
-        f.write(app_template_home)
-        print(f"{tic}{proj_name}/app/templates/home.html created successfully.{RESET}")
-        time.sleep(0.5)
+        template(directory,proj_name,path = os.path.join('server', 'templates'))
 
-    # STATIC
-    os.makedirs(os.path.join(directory, 'app', 'static'))
-    with open(os.path.join(directory, 'app', 'static', 'css', 'style.css'), 'w') as f:
-        f.write(app_static_css)
-        print(f"{tic}{proj_name}/app/static/css/style.css created successfully.{RESET}")
-        time.sleep(0.5)
+        app_static(directory, proj_name,path = os.path.join('server', 'static'))
 
-    os.makedirs(os.path.join(directory, 'app', 'static', 'js'))
-    with open(os.path.join(directory, 'app', 'static', 'js', 'script.js'), 'w') as f:
-        f.write(app_static_js)
-        print(f"{tic}{proj_name}/app/static/js/script.js created successfully.{RESET}")
-        time.sleep(0.5)
+        os.makedirs(os.path.join(directory, 'client'), exist_ok=True)
 
-    os.makedirs(os.path.join(directory, 'app', 'static', 'images'))
-    print(f"{tic}{proj_name}/app/static/images/ created successfully.{RESET}")
-    time.sleep(0.5)
+        if framework == 'react' or framework == "reactjs":
+            app_react(directory, proj_name, framework = framework)
 
-    # MIGRATIONS
-    os.makedirs(os.path.join(directory, 'migrations'))
-    print(f"{tic}{proj_name}/migrations/ created successfully.{RESET}")
-    time.sleep(0.5)
+        elif framework == "next" or framework == 'nextjs':
+            app_nextjs(directory, proj_name, framework = framework)
 
-    # INSTANCE
-    os.makedirs(os.path.join(directory, 'instance'))
-    with open(os.path.join(directory, 'instance', 'config.py'), 'w') as f:
-        f.write(instance_config)
-        print(f"{tic}{proj_name}/instance/config.py created successfully.{RESET}")
-        time.sleep(0.5)
+        elif framework == 'vite' or framework == "vitejs":
+            app_vite(directory, proj_name, framework = framework)
+        
+        else:
+            other_framework(directory, proj_name,script = script)
 
-    with open(os.path.join(directory, 'config.py'), 'w') as f:
-        f.write(config)
-        print(f"{tic}{proj_name}/config.py created successfully.{RESET}")
-        time.sleep(0.5)
 
-    with open(os.path.join(directory, 'run.py'), 'w') as f:
-        f.write(run)
-        print(f"{tic}{proj_name}/run.py created successfully.{RESET}")
-        time.sleep(0.5)
-    
+        print(f"{MAGENTA}Note: {RESET}Add proxy in your client side package.json")
+
+
+
+
+    except Exception as e:
+        print(f"{error} {RESET}{e}")

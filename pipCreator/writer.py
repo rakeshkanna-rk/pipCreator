@@ -307,7 +307,7 @@ def pip_creator(directory, file, folder):
     if any(char not in folder_name for char in directory):
         print(f"{RED}Invalid directory name{RESET}")
         print(f"{YELLOW}Directory name must contain only the following characters:{RESET}")
-        print("A-Z a-z 0-9 _ \n")
+        print(f"{GREEN}A to Z   {BLUE}a-z   {MAGENTA}0-9 _ \n{RESET}")
         print(footer)
         sys.exit(1)
 

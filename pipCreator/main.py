@@ -13,7 +13,7 @@ from pipcreator.constants import title, footer, update_dependencies
 from pipcreator.package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
 from pipcreator.git import git_clone_repository, git_commit_and_push
 
-from pipCreator.flaskapp import create_flask # TODO : Change to pipcreator.flaskapp
+from pipcreator.flaskapp import create_flask
 
 @click.group()
 def cli():
@@ -151,3 +151,4 @@ cli.add_command(list)
 cli.add_command(show)
 cli.add_command(clone)
 cli.add_command(commit)
+cli.add_command(create_flask_app)

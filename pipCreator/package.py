@@ -12,7 +12,7 @@ import textwrap
 from bs4 import BeautifulSoup
 
 from textPlay.colors import *
-from pipcreator.constants import tic, footer, error, warn
+from pipcreator.constants import tic, footer, error_msg, warn
 
 
 # SPINNER ANIMATION =========================================
@@ -97,7 +97,7 @@ def install_package(command):
                 print(f" - {warning}")
 
         if errors:
-            print(f"\n{error}")
+            print(f"\n{error_msg}")
             for error in errors:
                 print(f" - {error}")
 
@@ -211,7 +211,7 @@ def uninstall_package(command):
                 print(f" - {warning}")
 
         if errors:
-            print(f"\n{error}")
+            print(f"\n{error_msg}")
             for error in errors:
                 print(f" - {error}")
 
@@ -335,7 +335,7 @@ def update_package(command, package_name):
                 print(f" - {warning}")
 
         if errors:
-            print(f"\n{error}")
+            print(f"\n{error_msg}")
             for error in errors:
                 print(f" - {error}")
 

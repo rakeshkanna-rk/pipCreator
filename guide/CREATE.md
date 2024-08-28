@@ -35,10 +35,18 @@ pipc create my_project
 
 ### 2. **Creating Template Files**
 To Create template files, use the `pipc create <file_name>` command. This will create a new template file in your project directory. Available templates are `setup.py`, `pyproject.toml`, `README.md`, `.gitignore`, `requirements.txt`, and `test.py`.
-
+You can also create non-template files by flaging `--file` option and create folder with `--folder`.
 **Command:**
 ```bash
 pipc create <file_name>
+```
+
+```bash
+pipc create <file_name> --file
+```
+
+```bash
+pipc create <folder_name> --file
 ```
 
 **Example:**
@@ -46,9 +54,18 @@ pipc create <file_name>
 pipc create README.md
 ```
 
+```bash
+pipc create file.py --file
+```
+
+```bash
+pipc create app --folder
+```
+
 **What Happens:**
 - A `README.md` file or any other template file is created in your project directory.
 - The file may include a basic template with for project description, installation instructions, and usage examples, which you can then customize.
+- You can also create non-template files by flaging `--file` option and create folder with `--folder` option.
 
 ### 3. **Setting Up a Virtual Environment**
 A virtual environment is essential for managing dependencies and ensuring your project runs in a controlled environment. You can create a virtual environment using `pipc` as well.

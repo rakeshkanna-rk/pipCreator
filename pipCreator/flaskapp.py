@@ -78,7 +78,9 @@ def check_directory(directory, proj_name):
                 create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
             else:
                 print(check_directory_err)
-                list_dir(directory)
+                lst =list_dir(directory)
+                for i in lst:
+                    print(YELLOW + i + RESET)
 
         except Exception as e:
             print(f"{BOLD}{RED}ERROR: {RESET}{e}")
@@ -159,7 +161,7 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
         if flask_temp == "With React":
             venv_status = virtual_env(venv_name=os.path.join(directory, "server", "venv"))
         else:
-            venv_status = virtual_env("venv")
+            venv_status = virtual_env(venv_name=os.path.join(directory,"venv"))
     
     # venv ====================================================================
 
@@ -225,8 +227,9 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
 
     print(files_success)
     time.sleep(0.5)
-    print(flask_structure(proj_name, test))
+    print(flask_structure(proj_name, test, flask_temp))
     time.sleep(0.5)
+    check_package_latest("pipCreator")
     if venv_status:
         print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
         time.sleep(0.5)
@@ -267,6 +270,11 @@ def create_framework_app(directory, proj_name, framework = 'react', script = Non
     try:
         app(directory, proj_name, path="server")
 
+        with open(os.path.join(directory, 'server', 'app.py'), 'w') as f:
+            f.write(run)
+            print(f"{tic}{proj_name}/server/app.py created successfully.{RESET}")
+            time.sleep(0.5)
+
         template(directory,proj_name,path = os.path.join('server', 'templates'))
 
         app_static(directory, proj_name,path = os.path.join('server', 'static'))
@@ -274,13 +282,13 @@ def create_framework_app(directory, proj_name, framework = 'react', script = Non
         os.makedirs(os.path.join(directory, 'client'), exist_ok=True)
 
         if framework == 'react' or framework == "reactjs":
-            app_react(directory, proj_name, framework = framework)
+            app_react(directory, proj_name)
 
         elif framework == "next" or framework == 'nextjs':
-            app_nextjs(directory, proj_name, framework = framework)
+            app_nextjs(directory, proj_name)
 
         elif framework == 'vite' or framework == "vitejs":
-            app_vite(directory, proj_name, framework = framework)
+            app_vite(directory, proj_name)
         
         else:
             other_framework(directory, proj_name,script = script)

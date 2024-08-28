@@ -139,6 +139,7 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
         except Exception as e:
             print(f"{BOLD}{RED}Error: {e}{RESET}")
 
+    venv_status = False
     if dependencies:
         env = input(f"Do you like to create a virtual environment for your dependencies? (y/n) [{CYAN}Y{RESET}] [{MAGENTA}venv{RESET}] ")
         if not env:
@@ -268,7 +269,9 @@ def check_directory(directory, proj_name):
                 create_files_and_folders(directory, description, keywords, author, author_mail, proj_name, licence, dependencies)
             else:
                 print(check_directory_err)
-                list_dir(directory)
+                lst =list_dir(directory)
+                for i in lst:
+                    print(YELLOW + i + RESET)
 
         except Exception as e:
             print(f"{BOLD}{RED}ERROR: {RESET}{e}")

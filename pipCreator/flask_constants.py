@@ -6,8 +6,10 @@ from pipcreator.constants import tic
 from textPlay.colors import *
 
 # FLASK APP TEMPLATE
-def flask_structure(project_name, test=False):
-    if test:
+def flask_structure(project_name, test=False, framework='advanced'):
+    if framework in  ["react", "next", "vite", 'others']:
+        framework = 'Frameworks'
+    if test and framework == 'Advanced':
         flask_app = f'''
 {project_name}/
 │
@@ -30,6 +32,7 @@ def flask_structure(project_name, test=False):
 ├── run.py
 ├── requirements.txt
 ├── pyproject.toml
+├── LICENSE
 ├── venv/
 ├── instance/
 │   └── config.py
@@ -39,7 +42,7 @@ def flask_structure(project_name, test=False):
 │   └── conftest.py
 └── .env or .flaskenv
 '''
-    else:
+    elif not test and framework == 'Advanced':
         flask_app = f'''
 {project_name}/
 │
@@ -62,12 +65,121 @@ def flask_structure(project_name, test=False):
 ├── run.py
 ├── requirements.txt
 ├── pyproject.toml
+├── LICENSE
 ├── venv/
 ├── instance/
 │   └── config.py
 ├── migrations/
 └── .env or .flaskenv
 '''
+    elif test and framework == 'Basic':
+        flask_app = f'''
+{project_name}/
+│
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   └── images/
+├── templates/
+│   ├── layout.html
+│   └── home.html
+├── test/
+│   ├── test_basic.py
+│   └── conftest.py
+├── venv/
+├── README.md
+├── run.py
+├── requirements.txt
+├── pyproject.toml
+├── LICENSE
+└── .gitignore
+'''
+
+    elif not test and framework == 'Basic':
+        flask_app = f'''
+{project_name}/
+│
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   └── images/
+├── templates/
+│   ├── layout.html
+│   └── home.html
+├── venv/
+├── README.md
+├── run.py
+├── requirements.txt
+├── pyproject.toml
+├── LICENSE
+└── .gitignore
+'''
+    elif test and framework == 'Frameworks':
+        flask_app = f'''
+{project_name}/
+│
+├── client/
+│   └── <framework>/
+│ 
+├── server/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+│   ├── forms.py
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   ├── js/
+│   │   └── images/
+│   └── templates/
+│       ├── layout.html
+│       └── home.html
+├── tests/
+│   ├── test_basic.py
+│   └── conftest.py
+├── venv/
+├── config.py
+├── README.md
+├── run.py
+├── requirements.txt
+├── pyproject.toml
+├── LICENSE
+└── .gitignore
+'''
+    elif not test and framework == 'Frameworks':
+        flask_app = f'''
+{project_name}/
+│
+├── client/
+│   └── <framework>/
+│ 
+├── server/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+│   ├── forms.py
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   ├── js/
+│   │   └── images/
+│   └── templates/
+│       ├── layout.html
+│       └── home.html
+│
+├── venv/
+├── config.py
+├── README.md
+├── run.py
+├── requirements.txt
+├── pyproject.toml
+├── LICENSE
+└── .gitignore
+'''
+    else:
+        flask_app = " "
     return flask_app
 
 
@@ -355,12 +467,12 @@ def app_static(directory, proj_name, path= os.path.join('app', 'static')):
         time.sleep(0.5)
 
     os.makedirs(os.path.join(directory, path, 'js'))
-    with open(os.path.join(directory, 'app', 'static', 'js', 'script.js'), 'w') as f:
+    with open(os.path.join(directory, path, 'js', 'script.js'), 'w') as f:
         f.write(app_static_js)
         print(f"{tic}{proj_name}/{path}/js/script.js created successfully.{RESET}")
         time.sleep(0.5)
 
-    os.makedirs(os.path.join(directory, 'app', 'static', 'images'))
+    os.makedirs(os.path.join(directory, path, 'images'))
     print(f"{tic}{proj_name}/{path}/images/ created successfully.{RESET}")
     time.sleep(0.5)
 
@@ -389,6 +501,11 @@ def flask_directory(directory, proj_name):
         print(f"{tic}{proj_name}/run.py created successfully.{RESET}")
         time.sleep(0.5)
 
+    with open(os.path.join(directory, '.flaskenv'), 'w') as f:
+        f.write(flask_env)
+        print(f"{tic}{proj_name}/.flaskenv created successfully.{RESET}")
+        time.sleep(0.5)
+
 
 # BASIC APP ============================================================== 
 
@@ -406,7 +523,7 @@ from pipcreator.constants import error_msg
 def app_react(directory, proj_name):
 
     try:
-        backend_exec("npx create-react-app@latest client")
+        backend_exec(f"npx create-react-app@latest {os.path.join(proj_name,'client')}")
         print(f"{tic}{proj_name}/client created successfully.{RESET}")
     except Exception as e:
         print(error_msg," ",e)
@@ -414,7 +531,7 @@ def app_react(directory, proj_name):
 def app_nextjs(directory, proj_name):
 
     try:
-        backend_exec("npx create-next-app@latest client")
+        backend_exec(f"npx create-next-app@latest {os.path.join(proj_name,'client')}")
         print(f"{tic}{proj_name}/client created successfully.{RESET}")
     except Exception as e:
         print(error_msg," ",e)
@@ -422,7 +539,7 @@ def app_nextjs(directory, proj_name):
 def app_vite(directory, proj_name):
 
     try:
-        backend_exec("npx create-vite@latest client")
+        backend_exec(f"npx create-vite@latest {os.path.join(proj_name,'client')}")
         print(f"{tic}{proj_name}/client/vite created successfully.{RESET}")
     except Exception as e:
         print(error_msg," ",e)

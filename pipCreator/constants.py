@@ -12,7 +12,7 @@ author = 'Rakesh Kanna'
 title = f'\n\t{CYAN}PIP CREATOR{RESET} {VERSION}\n'
 tic = f"{BOLD}{BRIGHT_GREEN}√{RESET} "
 
-check_directory_err = f"{RED}Files exist in the directory. Try another directory or delete these files.{RESET}"
+check_directory_err = f"{RED}Files exist in the directory. Try another directory or delete following files.{RESET}"
 
 readme_success = f"{tic}README.md created successfully."
 setuppy_success = f"{tic}setup.py created successfully."
@@ -24,7 +24,7 @@ license_success = f"{tic}License created successfully."
 
 
 files_success = f"\n{tic}All files created successfully."
-ready_to_code = "Your project folder is ready to code."
+ready_to_code = "\nYour project folder is ready to code."
 file_written_check = f"{tic}Files Written successfully."
 
 wrt_prog_remd_ovr = f"{tic} README.md written successfully."
@@ -354,4 +354,72 @@ def erase_bar(progress, length=50, symbol='█', empty_symbol='-', messages=None
         sys.stdout.flush()
 
 
+
+
+
+
+
+
+import subprocess
+import sys
+
+def get_installed_version(package_name):
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "show", package_name],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        for line in result.stdout.splitlines():
+            if line.startswith("Version:"):
+                return line.split()[1]
+    except subprocess.CalledProcessError:
+        return None
+
+def get_latest_version(package_name):
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "index", "versions", package_name],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        versions = []
+        for line in result.stdout.splitlines():
+            if line.startswith("Available versions:"):
+                versions = line.split(":")[1].strip().split(", ")
+                break
+        if versions:
+            return versions[0]
+        return None
+    except subprocess.CalledProcessError:
+        return None
+
+def check_package_latest(package_name):
+    installed_version = get_installed_version(package_name)
+    latest_version = get_latest_version(package_name)
+
+    if installed_version and latest_version:
+        if installed_version == latest_version:
+            return 
+        else:
+            return f"{YELLOW}{package_name} is not up to date.{RESET} \nInstalled version: {installed_version}, \nLatest version: {latest_version}. \nUse {MAGENTA}pipc update {package_name}'{RESET} to update."
+    else:
+        return f"{package_name} is not installed."
+
+
+
+import importlib.util
+
+def is_package_installed(package_name):
+    package_spec = importlib.util.find_spec(package_name)
+    return package_spec is not None
+
+# Example usage
+# package_name = "requests"
+# if is_package_installed(package_name):
+#     print(f"The package '{package_name}' is installed.")
+# else:
+#     print(f"The package '{package_name}' is not installed.")
 

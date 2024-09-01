@@ -101,3 +101,71 @@ deactivate
 **What Happens:**
 - A virtual environment named `venv` is created inside your project directory.
 - This environment is isolated from your global Python environment, allowing you to install project-specific packages without affecting other projects.
+
+### 4. **Creating a Project**
+
+```bash
+PS E:\> pipc create Project
+
+        PIP CREATOR v0.1.0
+
+Creating project @ E:\
+
+Enter project name [Project]
+Enter a description for your project My new project
+Enter keywords for your project new project first example
+Enter author name Rakesh Kanna
+Enter author email rakeshkanna0108@gmail.com
+Enter license for your project [MIT] 
+Any dependencies for your project MonoCipher textPlay
+
+Do you want to create a test folder? (y/n) [Y] 
+Do you want to initialize git? (y/n) [Y] 
+Reinitialized existing Git repository in E:\Projects\.git
+Do you like to create a virtual environment for your dependencies? (y/n) [Y] [venv] 
+
+√ Virtual environment created successfully.
+
+Setup Types: setup.py pyproject.toml
+● Do you want to create a setup.py file for your project? (y/n) 
+● Do you want to create a pyproject.toml file for your project? (y/n) 
+● Do you want to create a setup.py file for your project? (y/n) 
+● Do you want to create a pyproject.toml file for your project? (y/n) y
+
+√ pyproject.toml created successfully.
+√ README.md created successfully.
+√ .gitignore created successfully.
+√ License created successfully.
+√ requirements.txt created successfully.
+√ Project/__init__.py created successfully.
+√ Project/main.py created successfully.
+√ Project/test/test.py created successfully.
+
+How to Use/Activate virtual environment
+   use: pipc guide --see on-venv
+
+√ All files created successfully.
+
+Project/
+│
+├── Project/
+│   ├── __init__.py
+│   └── main.py
+│
+├── test/
+│   └── test.py
+│
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── .gitignore
+└── pyproject.toml
+
+
+Your project folder is ready to code.
+
+         cd Project
+
+Rakesh Kanna
+Happy Coding!
+```

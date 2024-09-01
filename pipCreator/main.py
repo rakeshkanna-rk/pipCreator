@@ -48,7 +48,7 @@ def guide(see):
 @click.command()
 @click.argument('package')
 @click.option('--no-req',is_flag=True, default=False)
-@click.option('--plugin',is_flag=True, default="pipc.all-plugins") # TODO : Create plugin option
+@click.option('--plugin', default="pipc.all-plugins") # TODO : Create plugin option
 def install(package, no_req, plugin):
     command = f"pip install {package}"
     if package == "requirements.txt" or package == "requirements" or package == "all-packages" and not no_req:

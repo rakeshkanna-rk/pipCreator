@@ -141,8 +141,8 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
 
     venv_status = False
     if dependencies:
-        env = input(f"Do you like to create a virtual environment for your dependencies? (y/n) [{CYAN}Y{RESET}] [{MAGENTA}venv{RESET}] ")
-        if not env:
+        env_build = input(f"Do you like to create a virtual environment for your dependencies? (y/n) [{CYAN}Y{RESET}] [{MAGENTA}venv{RESET}] ")
+        if not env_build:
             env = "Y"
         if env.lower() == 'y' or env.lower() == 'yes':
             env = True
@@ -151,9 +151,9 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
             venv_name = env.split()[1]
         else:
             venv_name = 'venv'
-
         
-        venv_status = virtual_env(venv_name)
+        if env:
+            venv_status = virtual_env(os.path.join(proj_name, venv_name))
         
 
 
@@ -221,7 +221,7 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
         test = True
 
     if venv_status:
-        print(f"\nHow to Using/Activation virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
+        print(f"\nHow to Use/Activate virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
         time.sleep(1.0)
 
     print(files_success)

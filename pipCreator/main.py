@@ -13,7 +13,7 @@ from pipcreator.constants import title, footer, update_dependencies
 from pipcreator.package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
 from pipcreator.git import git_clone_repository, git_commit_and_push
 
-from pipcreator.flaskapp import create_flask
+from pipc_flask_app.flaskapp import create_flask
 
 @click.group()
 def cli():
@@ -48,16 +48,20 @@ def guide(see):
 @click.command()
 @click.argument('package')
 @click.option('--no-req',is_flag=True, default=False)
-@click.option('--plugin', default="pipc.all-plugins") # TODO : Create plugin option
+@click.option('--plugin', default="pipc.all-plugins") # TODO : Create plugin option || Delete flask file in flaskapp.py ad flask_constants.py
 def install(package, no_req, plugin):
     command = f"pip install {package}"
-    if package == "requirements.txt" or package == "requirements" or package == "all-packages" and not no_req:
+    if package == "requirements.txt" or package == "requirements" or package == "all" and not no_req:
         if not os.path.exists("requirements.txt"):
             print(f"{RED}requirements.txt does not exist{RESET}")
             print(f"\n{footer}")
             sys.exit(0)
         command = f"pip install -r requirements.txt"
     installed, already_installed = install_package(command)
+
+    # TODO : Add all plugin function
+    if plugin == "pipc.all-plugins":
+        create_flask(plugin)
 
     update_dependencies(installed, already_installed)
 

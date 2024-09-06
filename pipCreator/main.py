@@ -50,7 +50,7 @@ def guide(see):
     
 
 @click.command()
-@click.argument('package')
+@click.argument('package', required=False)
 @click.option('--no-req',is_flag=True, default=False)
 @click.option('--plugin', default="pipc.all-plugins") # TODO : Create plugin option || Delete flask file in flaskapp.py ad flask_constants.py
 def install(package, no_req, plugin):

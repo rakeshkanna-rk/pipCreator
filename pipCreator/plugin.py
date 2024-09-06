@@ -2,7 +2,7 @@ import requests
 import json
 def git_fetch(key, key2=None):
     # Step 1: Fetch the raw JSON file from GitHub
-    url = "https://raw.githubusercontent.com/rakeshkanna-rk/Glass-Icons/main/package.json"
+    url = "https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/main/plugin.json"
     response = requests.get(url)
 
     if response.status_code == 200:

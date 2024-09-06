@@ -1,0 +1,14 @@
+{
+  "name": "pipCreator plugins",
+  "version": "0.1.1",
+  "description": "A plugin to create flask app for pipCreator.",
+  "author": "Rakesh Kanna",
+  "author_email": "rakeshkanna0108@gmail.com",
+  "license": "MIT",
+  "all-plugins": ["pipc_flask_app"],
+  "plugins": {
+    "flask_app": "pipc_flask_app"
+  },
+  "python_requires": ">=3.6",
+  "console_scripts": "pipc install --plugin pipc.all-plugins"
+}

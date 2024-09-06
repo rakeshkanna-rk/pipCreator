@@ -3,7 +3,7 @@
 PIP CREATOR is a command-line interface tool designed to streamline the process of creating, testing, converting, and uploading Python modules to PyPI (Python Package Index). With this tool, developers can easily generate all necessary files and folders for their Python modules, edit or update existing code, create test suites, convert their code to distribution formats, and seamlessly upload their packages to PyPI.
 
 > [!WARNING]
-> This tool is in **BETA**/**DEVELOPMENT** stage. It may contain bugs or incomplete features at current versions `v0.1.0b1`.
+> This tool is in **BETA** / **DEVELOPMENT** stage. It may contain bugs or incomplete features at current versions `v0.1.0b1`.
 
 ## Features
 

@@ -13,7 +13,11 @@ from pipcreator.constants import title, footer, update_dependencies
 from pipcreator.package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
 from pipcreator.git import git_clone_repository, git_commit_and_push
 
+from pipCreator.plugin import git_fetch
+
 from pipc_flask_app.flaskapp import create_flask
+
+
 
 @click.group()
 def cli():
@@ -37,7 +41,7 @@ def upload():
     run_setup_command_upload()
 
 @click.command()
-@click.option('--see', help='See the guide with on topics')
+@click.option('--see', help='See the guide with on topics `all` or `on-<topic>`')
 def guide(see):
     if see=="all":
         guide_learn()
@@ -50,6 +54,34 @@ def guide(see):
 @click.option('--no-req',is_flag=True, default=False)
 @click.option('--plugin', default="pipc.all-plugins") # TODO : Create plugin option || Delete flask file in flaskapp.py ad flask_constants.py
 def install(package, no_req, plugin):
+    # TODO : Add all plugin function
+    plugin_name = plugin[4:].replace("-", "_")
+    if plugin.lower() == "pipc.all-plugins":
+        pkg = git_fetch("all-plugins")
+        print("PIPC PLUGINS")
+        for i in pkg:
+            print(f" - {BLUE}{i}{RESET}")
+        package = " ".join(pkg)
+    
+    else:
+        try:
+            pkg = git_fetch("packages", plugin_name)
+            if plugin_name not in pkg:
+                print(f"{RED}Plugin {package} not found{RESET}")
+                print(f"\n{footer}")
+                sys.exit(0)
+
+            else:
+                print("PIPC PLUGIN")
+                print(f" - {BLUE}{plugin_name}{RESET}")
+                package = pkg
+
+        except Exception as e:
+            print(f"{RED}Plugin {package} not found{RESET}")
+            print(f"\n{footer}")
+            sys.exit(0)
+
+
     command = f"pip install {package}"
     if package == "requirements.txt" or package == "requirements" or package == "all" and not no_req:
         if not os.path.exists("requirements.txt"):
@@ -58,10 +90,6 @@ def install(package, no_req, plugin):
             sys.exit(0)
         command = f"pip install -r requirements.txt"
     installed, already_installed = install_package(command)
-
-    # TODO : Add all plugin function
-    if plugin == "pipc.all-plugins":
-        create_flask(plugin)
 
     update_dependencies(installed, already_installed)
 

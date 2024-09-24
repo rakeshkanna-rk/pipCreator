@@ -9,7 +9,7 @@ from pipcreator.writer import pip_creator
 from pipcreator.convert import run_setup_command_convert
 from pipcreator.upload import run_setup_command_upload
 from pipcreator.guide import *
-from pipcreator.constants import title, footer, update_dependencies
+from pipcreator.constants import title, footer, tic, update_dependencies
 from pipcreator.package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info
 from pipcreator.git import git_clone_repository, git_commit_and_push
 
@@ -62,10 +62,14 @@ def install(package, no_req, plugin):
         for i in pkg:
             print(f" - {BLUE}{i}{RESET}")
         package = " ".join(pkg)
+        backend_exec(f'pipc install "{package}"')
+        print(f"{tic}All plugins installed successfully.{RESET}")
+        print(f"\n{footer}")
+        sys.exit(0)
     
     else:
         try:
-            pkg = git_fetch("packages", plugin_name)
+            pkg = git_fetch("plugins", plugin_name)
             if plugin_name not in pkg:
                 print(f"{RED}Plugin {package} not found{RESET}")
                 print(f"\n{footer}")
@@ -74,7 +78,11 @@ def install(package, no_req, plugin):
             else:
                 print("PIPC PLUGIN")
                 print(f" - {BLUE}{plugin_name}{RESET}")
-                package = pkg
+                package = " ".join(pkg)
+                backend_exec(f'pipc install "{package}"')
+                print(f"{tic}Plugin installed successfully.{RESET}")
+                print(f"\n{footer}")
+                sys.exit(0)
 
         except Exception as e:
             print(f"{RED}Plugin {package} not found{RESET}")

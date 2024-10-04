@@ -15,8 +15,10 @@ from pipcreator.git import git_clone_repository, git_commit_and_push
 
 from pipcreator.plugin import git_fetch
 
-from pipc_flask_app.flaskapp import create_flask
-
+try:
+    from pipc_flask_app.flaskapp import create_flask
+except:
+    pass
 
 
 @click.group()
@@ -182,7 +184,10 @@ def commit(msg):
 @click.command()
 @click.argument('directory')
 def create_flask_app(directory):
-    create_flask(directory)
+    try:
+        create_flask(directory)
+    except:
+        print(f"{RED}Plugin not found. {RESET}\nUse {MAGENTA}pipc install pipc.flask_app --plugin{RESET} to install the plugin.")
 
 
 cli.add_command(create)

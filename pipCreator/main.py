@@ -27,7 +27,6 @@ def cli():
 @click.option('--pluign',is_flag=True, default=False, help='Create a new plugin app')
 def create(directory, file, folder, pluign):
     if pluign:
-        directory = directory.replace("-", "_")
         cmd = git_fetch("commands", directory)
         backend_exec(cmd)
     else:
@@ -54,10 +53,8 @@ def guide(see):
 @click.command(help='Install package with clear visuals')
 @click.argument('package', required=False)
 @click.option('--no-req',is_flag=True, default=False)
-@click.option('--plugin', is_flag=True, default=False) # TODO : Create plugin option || Delete flask file in flaskapp.py ad flask_constants.py
+@click.option('--plugin', is_flag=True, default=False)
 def install(package, no_req, plugin):
-    # TODO : Add all plugin function
-
 
     if plugin:
         plugin_name = package
@@ -70,25 +67,23 @@ def install(package, no_req, plugin):
             
         
         else:
-            try:
-                pkg = git_fetch("plugins", plugin_name)
-                if plugin_name not in pkg:
-                    print(f"{RED}Plugin {package} not found{RESET}")
-                    
-                    sys.exit(0)
+            
+            pkg = git_fetch("plugins", plugin_name[5:])
+            if plugin_name not in pkg:
+                print(f"{RED}Plugin {plugin_name[5:]} not found{RESET}")
+                print("Available plugins:")
+                all_plugins = git_fetch("all-plugins")
+                for i in all_plugins: print(f" - {BLUE}{i}{RESET}")
+                exit()
 
-                else:
-                    print("PIPC PLUGIN")
-                    print(f" - {BLUE}{plugin_name}{RESET}")
-                    package = " ".join(pkg)
+            else:
+                print("PIPC PLUGIN")
+                print(f" - {BLUE}{plugin_name}{RESET}")
+                package = " ".join(pkg)
 
-            except Exception as e:
-                print(f"{RED}Plugin {package} not found{RESET}")
-                
-                sys.exit(0)
-
-    else:
-        raise NotImplementedError
+            # except Exception as e:
+            #     print(f"{RED}ERROR : {e}{RESET}")
+            #     sys.exit(0)
     
 
 
@@ -161,15 +156,7 @@ def show(package):
     show_package_info(package)
     
 
-@click.command(help='Create all necessary files for flask app')
-@click.argument('directory')
-def create_flask_app(directory):
-    try:
-        from pipc_flask_app.flaskapp import create_flask
-        create_flask(directory)
-    except Exception as e:
-        print(f"{RED}Plugin not found. {RESET}\nUse {MAGENTA}pipc install pipc.flask_app --plugin{RESET} to install the plugin.")
-        print("Error", e)
+print(f"\n{footer}")
 
 cli.add_command(create)
 cli.add_command(convert)
@@ -181,6 +168,3 @@ cli.add_command(update)
 cli.add_command(search)
 cli.add_command(list)
 cli.add_command(show)
-cli.add_command(create_flask_app)
-
-print(f"\n{footer}")

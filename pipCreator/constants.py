@@ -305,9 +305,9 @@ def update_dependencies(installed , already_installed):
         if not upd_setup:
             upd_setup = 'y'
         if upd_setup.lower() == 'y':
-            update_toml(setup_file='pyproject.toml', new_dependencies=content)
+            update_toml(file_path='pyproject.toml', dependencies_to_add=content)
 
-    if os.path.exists("setup.py"):
+    elif os.path.exists("setup.py"):
         print(f"{GREEN}Found setup.py.{RESET}")
         upd_setup = input(f"Do you want to update setup.py? (y/n) [{CYAN}Y{RESET}] ")
         if not upd_setup:

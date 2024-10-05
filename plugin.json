@@ -10,6 +10,9 @@
   "plugins": {
     "flask_app": "pipc_flask_app"
   },
+  "commands": {
+    "flask_app" : "pipc-flask create "
+  },
   "python_requires": ">=3.6",
   "console_scripts": "pipc install --plugin pipc.all-plugins"
 }

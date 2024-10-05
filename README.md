@@ -363,6 +363,6 @@ This project is licensed under the terms of the MIT license. See the [LICENSE](L
 
 Author  : **Rakesh Kanna**  
 Mail    : [rakeshkanna0108@gmail.com](mailto:rakeshkanna0108@gmail.com)  
-Github  : [@rakeshkanna-rk](https://github.com/rakeshkanna-rk)
+Github  : [@rakeshkanna-rk](https://github.com/rakeshkanna-rk)  
 GitHub  : [PipCreator](https://github.com/rakeshkanna-rk/pipCreator/)  
 PyPI    : [PipCreator](https://pypi.org/project/PipCreator/)  

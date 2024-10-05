@@ -46,7 +46,7 @@ pipc create <file_name> --file
 ```
 
 ```bash
-pipc create <folder_name> --file
+pipc create <folder_name> --folder
 ```
 
 **Example:**

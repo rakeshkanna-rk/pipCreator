@@ -18,7 +18,7 @@ Once your project is ready and the distribution files are generated, you can use
 
 **Command:**
 ```bash
-upload
+pipc upload
 ```
 
 **What Happens:**

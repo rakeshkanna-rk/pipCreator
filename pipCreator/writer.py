@@ -224,7 +224,7 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
         test = True
 
     if venv_status:
-        print(f"\nHow to Use/Activate virtual environment\n   use: {MAGENTA}pipc guide --see on-venv{RESET}")
+        print(f"\nHow to Use/Activate virtual environment\n   use: {MAGENTA}pipc guide --see on-create{RESET}")
         time.sleep(1.0)
 
     print(files_success)

@@ -288,7 +288,7 @@ def main():
 
 # UPDATING FILES =============================================================
 
-from pipcreator.install import check_requirements, update_setup, update_toml
+from pipcreator.package import check_requirements, update_setup, update_toml
 
 def update_dependencies(installed , already_installed):
     upd_req = input(f"\nDo you want to update requirements.txt? (y/n) [{CYAN}Y{RESET}] ")

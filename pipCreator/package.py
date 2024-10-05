@@ -606,7 +606,7 @@ def update_toml(file_path='pyproject.toml', dependencies_to_add=None):
                 dependencies_to_add = []
             
             data = read_toml(file_path)
-            print(f"Current dependencies: {data.get('project', {}).get('dependencies', [])}")
+            # print(f"Current dependencies: {data.get('project', {}).get('dependencies', [])}")
             
             updated_data = update_dependencies(data, dependencies_to_add)
             write_toml(file_path, updated_data)
@@ -617,3 +617,16 @@ def update_toml(file_path='pyproject.toml', dependencies_to_add=None):
 
         except Exception as e:
             print(f"{RED}Error: {e}{RESET}")
+
+
+
+# CHECK PACKAGE ===============================================================\
+import importlib.util
+
+def check_package(package_name):
+    """Check if a package is installed."""
+    package_spec = importlib.util.find_spec(package_name)
+    if package_spec is not None:
+        return True
+    else:
+        return False

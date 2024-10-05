@@ -27,6 +27,7 @@ def cli():
 @click.option('--pluign',is_flag=True, default=False, help='Create a new plugin app')
 def create(directory, file, folder, pluign):
     if pluign:
+        directory = directory.replace("-", "_")
         cmd = git_fetch("commands", directory)
         backend_exec(cmd)
     else:
@@ -67,23 +68,23 @@ def install(package, no_req, plugin):
             
         
         else:
-            
-            pkg = git_fetch("plugins", plugin_name[5:])
-            if plugin_name not in pkg:
-                print(f"{RED}Plugin {plugin_name[5:]} not found{RESET}")
-                print("Available plugins:")
-                all_plugins = git_fetch("all-plugins")
-                for i in all_plugins: print(f" - {BLUE}{i}{RESET}")
-                exit()
+            try:
+                pkg = git_fetch("plugins", plugin_name[5:])
+                if plugin_name not in pkg:
+                    print(f"{RED}Plugin {plugin_name[5:]} not found{RESET}")
+                    print("Available plugins:")
+                    all_plugins = git_fetch("all-plugins")
+                    for i in all_plugins: print(f" - {BLUE}{i}{RESET}")
+                    exit()
 
-            else:
-                print("PIPC PLUGIN")
-                print(f" - {BLUE}{plugin_name}{RESET}")
-                package = " ".join(pkg)
+                else:
+                    print("PIPC PLUGIN")
+                    print(f" - {BLUE}{plugin_name}{RESET}")
+                    package = " ".join(pkg)
 
-            # except Exception as e:
-            #     print(f"{RED}ERROR : {e}{RESET}")
-            #     sys.exit(0)
+            except Exception as e:
+                print(f"{RED}ERROR : {e}{RESET}")
+                sys.exit(0)
     
 
 

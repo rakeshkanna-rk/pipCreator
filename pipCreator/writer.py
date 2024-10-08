@@ -233,7 +233,6 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
     time.sleep(0.5)
     print(ready_to_code)
     print(f"\n\t {BRIGHT_BLUE}cd{RESET} {directory}\n")
-    print(footer)
 
 
 # CHECK DIRECTORY

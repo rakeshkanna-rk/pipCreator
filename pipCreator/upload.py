@@ -6,7 +6,7 @@ import sys
 from textPlay.colors import *
 from textPlay.backend import backend_exec
 from pipcreator.constants import check_folder_contents
-from pipcreator.constants import footer, tic
+from pipcreator.constants import tic
 from pipcreator.constants import exit_msg, invalid_input
 
 def uploader(command):
@@ -84,8 +84,5 @@ def run_setup_command_upload():
 
     else:
         print(f"{RED}Something went wrong. Please try again.{YELLOW}")
-
-    time.sleep(1.0)
-    print(f"\n{footer}")
 
 

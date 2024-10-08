@@ -12,7 +12,7 @@ import textwrap
 from bs4 import BeautifulSoup
 
 from textPlay.colors import *
-from pipcreator.constants import tic, footer, error_msg, warn
+from pipcreator.constants import tic, error_msg, warn
 
 
 # SPINNER ANIMATION =========================================
@@ -224,9 +224,6 @@ def uninstall_package(command):
 
     except Exception as e:
         print(f"\nError: {e}")
-
-    finally:
-        print(f"\n{footer}")
 
 def track_uninstalled_packages(output):
     """

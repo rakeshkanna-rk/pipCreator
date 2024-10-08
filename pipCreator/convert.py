@@ -8,7 +8,6 @@ import re
 from textPlay.colors import *
 # from textPlay.backend import backend_suppress
 from pipcreator.constants import check_folder_contents
-from pipcreator.constants import footer
 from pipcreator.constants import tic, invalid_input
 
 def backend_suppress(command):
@@ -114,8 +113,6 @@ def run_setup_command_convert():
     else: 
         print(f"{RED}Something went wrong. Please try again.{RESET}")
 
-    time.sleep(1.0)
-    print(f"\n{footer}")
 
 
 

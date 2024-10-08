@@ -64,7 +64,7 @@ def install_package(command):
             # Track installed packages and already installed packages
             installed_packages, already_installed_packages = track_installed_packages(result.stdout)
         else:
-            print("\nError: An error occurred during the installation.")
+            print(f"\n{error} An error occurred during the installation.")
             errors.append(result.stderr)
         
         # Capture warnings

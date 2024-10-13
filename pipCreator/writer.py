@@ -141,16 +141,18 @@ def create_files_and_folders(directory, description, keywords, author, author_ma
 
     venv_status = False
     if dependencies:
+        env_enabled = False
         env_build = input(f"Do you like to create a virtual environment for your dependencies? (y/n) [{CYAN}Y{RESET}] [{MAGENTA}venv{RESET}] ")
         if not env_build:
             env = "Y"
             venv_name = 'venv'
+            env_enabled = True
 
-        if env.lower() == 'y' or env.lower() == 'yes':
+        if env_build.lower() == 'y' or env_build.lower() == 'yes':
             env_enabled = True
 
         if len(env_build.split()) == 2:
-            venv_name = env.split()[1]
+            venv_name = env_build.split()[1]
         else:
             venv_name = 'venv'
         

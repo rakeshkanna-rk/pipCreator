@@ -16,10 +16,13 @@ from .convert import run_setup_command_convert
 from .upload import run_setup_command_upload
 
 # GUIDE
-from .guide import guide_learn
+from .guide import guide_learn, web_guide
 
 # PACKAGE MANGEMENT
-from .package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info, update_toml, update_setup, update_dependencies
+from .package import install_package, uninstall_package, update_package, search_pypi_package, list_installed_packages, show_package_info, update_toml, update_setup, update_dependencies, check_package
+
+# PLUGIN
+from .plugin import git_fetch
 
 __create__ = ["pip_creator"]
 

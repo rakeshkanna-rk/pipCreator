@@ -8,11 +8,10 @@ import threading
 import subprocess
 import pkg_resources
 import requests
-import textwrap
 from bs4 import BeautifulSoup
 
 from textPlay.colors import *
-from pipcreator.constants import tic, error_msg, warn
+from pipcreator.constants import *
 
 
 # SPINNER ANIMATION =========================================

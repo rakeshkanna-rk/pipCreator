@@ -5,6 +5,7 @@ import importlib.metadata
 
 from textPlay.colors import *
 
+from pipcreator.package import check_requirements, update_setup, update_toml 
 
 # CONSTANTS
 VERSION = 'v0.1.0'
@@ -288,7 +289,6 @@ def main():
 
 # UPDATING FILES =============================================================
 
-from pipcreator.package import check_requirements, update_setup, update_toml
 
 def update_dependencies(installed , already_installed):
     upd_req = input(f"\nDo you want to update requirements.txt? (y/n) [{CYAN}Y{RESET}] ")

@@ -230,7 +230,6 @@ Updated dependencies:
  - colorama
  - MarkupSafe>=2.0
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -249,7 +248,6 @@ Uninstalled packages:
 Summary:
    (1) uninstalled, (0) not installed, (0) warning(s), (0) error(s)
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -269,7 +267,6 @@ Updated packages:
 Summary:
    (1) updated, (0) up to date, (0) warning(s), (0) error(s)
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -300,7 +297,6 @@ pyaxe-flask (2020.8.19)    : 对Flask进行封装，更简单方便使用
 pytest-flask (1.3.0)       : A set of py.test fixtures to test Flask applications.
 pywrapper-flask (0.1.0)    : Package to auto marshall and unmarshall flask requests
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -323,7 +319,6 @@ zipp (3.18.1)
 
   Total Installed Packages: 196
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -344,6 +339,5 @@ Location: C:\Users\Akash kanna\AppData\Roaming\Python\Python312\site-packages
 Requires: blinker, click, itsdangerous, Jinja2, Werkzeug
 Required-by: Flask-Migrate, Flask-SQLAlchemy, Flask-WTF, pywhatkit
 
-Rakesh Kanna
 Happy Coding!
 ```

@@ -166,6 +166,5 @@ Your project folder is ready to code.
 
          cd Project
 
-Rakesh Kanna
 Happy Coding!
 ```

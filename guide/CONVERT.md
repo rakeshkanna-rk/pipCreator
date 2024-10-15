@@ -78,6 +78,5 @@ Converting files...
 
 √ Files Converted successfully.
 
-Rakesh Kanna 
 Happy Coding!
 ```

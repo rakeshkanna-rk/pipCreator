@@ -237,7 +237,6 @@ Your project folder is ready to code.
 
          cd new_project
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -274,7 +273,6 @@ Converting files...
 
 √ Files Converted successfully.
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -298,7 +296,6 @@ This will use twine to upload the package.
 
 Package has uploaded/not uploaded as per the twine
 
-Rakesh Kanna
 Happy Coding!
 ```
 
@@ -355,13 +352,12 @@ What PIP CREATOR can do?
 GitHub  : https://github.com/rakeshkanna-rk/pipCreator
 PyPI    : https://pypi.org/project/pipCreator/
 
-Rakesh Kanna
 Happy Coding!
 ```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+Contributions are welcome! Please feel free to submit [issues](https://github.com/rakeshkanna-rk/pipCreator/issues) or [pull requests](https://github.com/rakeshkanna-rk/pipCreator/pulls).
 
 ## License
 

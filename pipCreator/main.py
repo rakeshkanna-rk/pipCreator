@@ -41,6 +41,12 @@ def create(directory, file, folder, pluign):
             print(f"{RED}Plugin {directory} not found{RESET}")
             print(f"Use: {MAGENTA}pipc install pipc.{directory.replace('_', '-')} --plugin{RESET}")
             exit()
+        
+        if not check:
+            print('Unable to fetch plugin dependencies, please try again later')
+            print(f'Use: {MAGENTA}pipc-flask create{RESET}')
+            print('To create a new flask app, if plugin is already installed')
+            exit()
             
         cmd = git_fetch("commands", directory)
         backend_exec(cmd)

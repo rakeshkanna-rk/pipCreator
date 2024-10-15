@@ -1,8 +1,8 @@
 <p align="center">
 
-<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoDark.png#gh-dark-mode-only">
+<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoDark.png#gh-dark-mode-only" width="200px">
 
-<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoLight.png#gh-light-mode-only">
+<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoLight.png#gh-light-mode-only" width="200px">
 
 </p>
 

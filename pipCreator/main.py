@@ -2,7 +2,7 @@ import click
 import os
 import sys
 
-from textPlay import backend_exec
+from textPlay import osExecute
 from textPlay.colors import *
 
 from pipcreator.writer import pip_creator
@@ -49,7 +49,7 @@ def create(directory, file, folder, pluign):
             exit()
             
         cmd = git_fetch("commands", directory)
-        backend_exec(cmd)
+        osExecute(cmd)
     else:
         directory = str(directory)
         pip_creator(directory, file, folder)

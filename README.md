@@ -1,9 +1,5 @@
 <p align="center">
-
-<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoDark.png#gh-dark-mode-only" width="200px">
-
-<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/logoLight.png#gh-light-mode-only" width="200px">
-
+<img src="https://raw.githubusercontent.com/rakeshkanna-rk/pipCreator/refs/heads/main/logo/pipcreator.png">
 </p>
 
 <h1 align="center"> PIP CREATOR v0.1.0</h1>
